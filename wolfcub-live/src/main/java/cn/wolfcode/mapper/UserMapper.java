@@ -20,4 +20,6 @@ public interface UserMapper {
     List<User> selectForList(QueryObject qo);
 
     void changeStatus(@Param("id") Long id, @Param("status") String status);
+
+    User selectByUsername(String username);
 }

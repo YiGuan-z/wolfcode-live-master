@@ -1,7 +1,6 @@
-package cn.wolfcode.web.controller;
+package cn.wolfcode.web.controller.user;
 
 import cn.wolfcode.domain.User;
-import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.qo.UserQuery;
 import cn.wolfcode.service.IUserService;
 import cn.wolfcode.vo.JsonResult;

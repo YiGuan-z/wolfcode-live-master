@@ -81,4 +81,9 @@
         from t_user
         <include refid="base_where"/>
     </select>
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select *
+        from t_user
+        where username = #{username}
+    </select>
 </mapper>

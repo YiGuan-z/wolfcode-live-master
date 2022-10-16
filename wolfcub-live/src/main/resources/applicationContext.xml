@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 1. 引入属性文件 -->
+    <context:property-placeholder location="classpath*:db.properties"/>
+    <context:property-placeholder location="classpath*:config.properties"/>
+    <!-- 2. 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+    <!-- 3. 配置 SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="cn.wolfcode.domain"/>
+        <property name="mapperLocations" value="classpath*:cn/wolfcode/mapper/*Mapper.xml"/>
+    </bean>
+    <!-- 4. Mapper 扫描器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.wolfcode.mapper"/>
+    </bean>
+    <!-- 5. 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!-- 事务注解 -->
+    <tx:annotation-driven/>
+    <aop:aspectj-autoproxy/>
+<!--    <bean class="cn.wolfcode.utils.Logger" id="log"/>-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="logger" expression="execution(* cn.wolfcode.service.*Service.*(..))"/>-->
+<!--        <aop:advisor advice-ref="log" pointcut-ref="logger"/>-->
+<!--    </aop:config>-->
+
+    <!-- nettyServer -->
+    <bean id="webSocketNettyServer" class="cn.wolfcode.core.netty.WebSocketNettyServer">
+        <property name="serverPort" value="${netty.server-port}"/>
+    </bean>
+
+    <context:component-scan base-package="cn.wolfcode.service"/>
+</beans>

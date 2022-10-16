@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.BulletMsgMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.domain.BulletMsg">
+        <id column="id" property="id"/>
+        <result column="author_id" property="author.id"/>
+        <result column="video_id" property="video.id"/>
+        <result column="content" property="content"/>
+        <result column="position" property="position"/>
+        <result column="color" property="color"/>
+        <result column="video_time" property="videoTime"/>
+        <result column="likes" property="likes"/>
+        <result column="font_size" property="fontSize"/>
+        <result column="status" property="status"/>
+        <result column="release_time" property="releaseTime"/>
+    </resultMap>
+    <resultMap id="FullResultMap" extends="BaseResultMap" type="cn.wolfcode.domain.BulletMsg">
+        <association property="author" columnPrefix="u_"
+                     resultMap="cn.wolfcode.mapper.UserMapper.BaseResultMap"/>
+        <association property="video" columnPrefix="v_"
+                     resultMap="cn.wolfcode.mapper.VideoMapper.BaseResultMap"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_bullet_msg
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_bullet_msg (content, position, author_id, video_id, video_time, likes, color,
+                                  font_size, status, release_time)
+        values (#{content}, #{position}, #{author.id}, #{video.id}, #{videoTime}, 0, #{color},
+                #{fontSize}, 0, #{releaseTime})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update t_bullet_msg
+        set content      = #{content},
+            position     = #{position},
+            author_id    = #{author.id},
+            video_id     = #{video.id},
+            video_time   = #{videoTime},
+            likes        = #{likes},
+            color        = #{color},
+            font_size    = #{fontSize},
+            release_time = #{releaseTime}
+        where id = #{id}
+    </update>
+
+    <update id="changeStatus">
+        update t_bullet_msg set status = #{status} where id = #{id}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id,
+               content,
+               position,
+               author_id,
+               video_id,
+               video_time,
+               likes,
+               color,
+               font_size,
+               status,
+               release_time
+        from t_bullet_msg
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               content,
+               position,
+               author_id,
+               video_id,
+               video_time,
+               likes,
+               color,
+               font_size,
+               status,
+               release_time
+        from t_bullet_msg
+    </select>
+    <sql id="full_where">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (bm.content like concat('%',#{keyword},'%'))
+            </if>
+            <if test="status != null and status > -1">
+                and bm.status = #{status}
+            </if>
+        </where>
+    </sql>
+    <sql id="full_columns">
+           bm.id,
+           bm.content,
+           bm.position,
+           bm.author_id,
+           bm.video_id,
+           bm.video_time,
+           bm.likes,
+           bm.color,
+           bm.font_size,
+           bm.status,
+           bm.release_time,
+           u.id u_id,
+           u.username u_username,
+           u.nickname u_nickname,
+           v.id v_id,
+           v.title v_title
+    </sql>
+    <sql id="full_join">
+        t_bullet_msg bm
+            join t_user u on bm.author_id = u.id
+            join t_video v on bm.video_id = v.id
+    </sql>
+    <select id="selectForCount" resultType="java.lang.Long">
+        select count(*)
+        from <include refid="full_join"/>
+        <include refid="full_where"/>
+    </select>
+    <select id="selectForList" resultMap="FullResultMap">
+        select <include refid="full_columns"/>
+        from <include refid="full_join"/>
+        <include refid="full_where"/>
+        limit #{start}, #{limit}
+    </select>
+
+    <select id="selectMsgCountByVideoId" resultType="java.lang.Integer">
+        select count(*)
+        from t_bullet_msg
+        where video_id = #{videoId} and status = 0
+    </select>
+    <select id="selectByVideoId" resultMap="BaseResultMap">
+        select * from t_bullet_msg
+        where video_id = #{videoId}
+    </select>
+
+    <select id="selectRollingMessages" resultMap="BaseResultMap">
+        select * from t_bullet_msg where video_id = #{videoId} and video_time = #{currentVideoTime}
+    </select>
+</mapper>

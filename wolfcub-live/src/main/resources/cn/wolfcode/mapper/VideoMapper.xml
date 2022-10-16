@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.VideoMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.domain.Video">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="sub_title" property="subTitle"/>
+        <result column="description" property="description"/>
+        <result column="cover_url" property="coverUrl"/>
+        <result column="video_url" property="videoUrl"/>
+        <result column="author_id" property="authorId"/>
+        <result column="likes" property="likes"/>
+        <result column="coins" property="coins"/>
+        <result column="shares" property="shares"/>
+        <result column="comments" property="comments"/>
+        <result column="views" property="views"/>
+        <result column="status" property="status"/>
+        <result column="release_time" property="releaseTime"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_video
+        where id = #{id}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_video (title, sub_title, description,
+                             cover_url, author_id, likes,
+                             coins, shares, comments,
+                             views, status, release_time, created_time)
+        values (#{title}, #{subTitle}, #{description},
+                #{coverUrl}, #{authorId}, #{likes},
+                #{coins}, #{shares}, #{comments},
+                #{views}, #{status}, #{releaseTime}, NOW())
+    </insert>
+    <update id="updateByPrimaryKey">
+        update t_video
+        set title        = #{title},
+            sub_title    = #{subTitle},
+            description  = #{description},
+            cover_url    = #{coverUrl},
+            author_id    = #{authorId},
+            likes        = #{likes},
+            coins        = #{coins},
+            shares       = #{shares},
+            comments     = #{comments},
+            views        = #{views},
+            status       = #{status},
+            release_time = #{releaseTime},
+            updated_time = NOW()
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id,
+               title,
+               sub_title,
+               description,
+               cover_url,
+               author_id,
+               likes,
+               coins,
+               shares,
+               comments,
+               views,
+               status,
+               release_time,
+               created_time,
+               updated_time
+        from t_video
+        where id = #{id}
+    </select>
+</mapper>

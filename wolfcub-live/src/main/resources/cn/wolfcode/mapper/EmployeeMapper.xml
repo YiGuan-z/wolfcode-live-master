@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.EmployeeMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.domain.Employee">
+        <id column="id" property="id"/>
+        <result column="avatar" property="avatar"/>
+        <result column="username" property="username"/>
+        <result column="name" property="name"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="age" property="age"/>
+        <result column="admin" property="admin"/>
+        <result column="hireDate" property="hireDate"/>
+        <association property="dept" column="dept_id"
+                     select="cn.wolfcode.mapper.DepartmentMapper.selectByPrimaryKey"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from sys_employee
+        where id = #{id}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_employee (username, name, password, email, age, admin, dept_id,
+                                  hireDate)
+        values (#{username}, #{name}, #{password}, #{email}, #{age}, #{admin}, #{dept.id},
+                #{hireDate})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update sys_employee
+        set username = #{username},
+            name     = #{name},
+            password = #{password},
+            email    = #{email},
+            age      = #{age},
+            admin    = #{admin},
+            dept_id  = #{dept.id},
+            hireDate = #{hireDate}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id,
+               avatar,
+               username,
+               name,
+               password,
+               email,
+               age,
+               admin,
+               dept_id,
+               hireDate
+        from sys_employee
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id,
+               avatar,
+               username,
+               name,
+               password,
+               email,
+               age,
+               admin,
+               dept_id,
+               hireDate
+        from sys_employee
+    </select>
+
+    <sql id="base_where">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (username like concat('%', #{keyword}, '%') or name like concat('%', #{keyword}, '%'))
+            </if>
+            <if test="deptIds != null">
+                dept_id in
+
+                <foreach collection="deptIds" open="(" separator="," close=")" item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectForCount" resultType="java.lang.Long">
+        select count(*)
+        from sys_employee
+        <include refid="base_where"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        select id,
+               avatar,
+               username,
+               name,
+               password,
+               email,
+               age,
+               admin,
+               dept_id,
+               hireDate
+        from sys_employee
+        <include refid="base_where"/>
+        limit #{start}, #{limit}
+    </select>
+    <select id="selectByUsername" resultType="cn.wolfcode.domain.Employee">
+        select id, name, username, avatar, password
+        from sys_employee
+        where username = #{username}
+    </select>
+
+    <update id="resetPassword">
+        update sys_employee
+        set password=#{password}
+        where id = #{id}
+    </update>
+</mapper>

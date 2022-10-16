@@ -1,0 +1,37 @@
+.barrage-item {
+    position: absolute;
+    font-size: 22px;
+    white-space: nowrap;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000;
+}
+
+.barrage-row{
+    right: 0;
+}
+
+.barrage-row-move{
+    will-change: transform;
+    animation: barrage 5s linear;
+    animation-play-state: running;
+}
+
+.barrage-center-move{
+    will-change: transform;
+    animation: barrage-center 5s linear;
+    animation-play-state: running;
+}
+
+@keyframes barrage {
+    from {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes barrage-center {
+    from {
+        visibility: visible;
+    }
+    to {
+        visibility: visible;
+    }
+}

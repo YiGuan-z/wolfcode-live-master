@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.BulletMsgSensitiveMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.domain.BulletMsgSensitive">
+        <id column="id" property="id"/>
+        <result column="sensitive_msg" property="sensitiveMsg"/>
+        <result column="show_msg" property="showMsg"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_bullet_msg_sensitive
+        where id = #{id}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_bullet_msg_sensitive (sensitive_msg, show_msg, create_time, update_time)
+        values (#{sensitiveMsg}, #{showMsg}, #{createTime}, #{updateTime})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update t_bullet_msg_sensitive
+        set sensitive_msg = #{sensitiveMsg},
+            show_msg      = #{showMsg},
+            create_time   = #{createTime},
+            update_time   = #{updateTime}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id, sensitive_msg, show_msg, create_time, update_time
+        from t_bullet_msg_sensitive
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, sensitive_msg, show_msg, create_time, update_time
+        from t_bullet_msg_sensitive
+    </select>
+</mapper>

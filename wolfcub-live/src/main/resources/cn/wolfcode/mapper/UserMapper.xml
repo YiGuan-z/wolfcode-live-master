@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="cn.wolfcode.domain.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="avatar" property="avatar"/>
+        <result column="nickname" property="nickname"/>
+        <result column="gender" property="gender"/>
+        <result column="signature" property="signature"/>
+        <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+    <update id="deleteByPrimaryKey">
+        update t_user
+        set deleted = #{deleted}
+        where id = #{id}
+    </update>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user (username, password, avatar, nickname, gender, signature,
+                            status, deleted, created_time)
+        values (#{username}, #{password}, #{avatar}, #{nickname}, #{gender}, #{signature},
+                #{status}, 0, NOW())
+    </insert>
+    <update id="updateByPrimaryKey">
+        update t_user
+        set username     = #{username},
+            password     = #{password},
+            avatar       = #{avatar},
+            nickname     = #{nickname},
+            gender       = #{gender},
+            signature    = #{signature},
+            status       = #{status},
+            updated_time = NOW()
+        where id = #{id}
+    </update>
+    <update id="changeStatus">
+        update t_user
+        set status = #{status}
+        where id = #{id}
+    </update>
+    <sql id="base_columns">
+               id,
+               username,
+               password,
+               avatar,
+               nickname,
+               gender,
+               signature,
+               status,
+               deleted,
+               created_time,
+               updated_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select <include refid="base_columns"/>
+        from t_user
+        where id = #{id}
+    </select>
+    <sql id="base_where">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (username like concat('%', #{keyword}, '%') or nickname like concat('%',#{keyword},'%'))
+            </if>
+            <if test="status != null and status > -1">
+                and status = #{status}
+            </if>
+            and deleted = #{deleted}
+        </where>
+    </sql>
+    <select id="selectForCount" resultType="java.lang.Long">
+        select count(*)
+        from t_user
+        <include refid="base_where"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        select <include refid="base_columns"/>
+        from t_user
+        <include refid="base_where"/>
+    </select>
+</mapper>

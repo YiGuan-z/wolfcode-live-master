@@ -40,6 +40,12 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+      <!--      <el-form-item prop="verifyUrl">-->
+      <el-image
+        :src="verifyUrl"
+        @click="handleGetVerifuUrl"
+      />
+      <!--      </el-form-item>-->
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
@@ -69,7 +75,8 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      verifyUrl: '/dev-api/verifyCode'
     }
   },
   watch: {
@@ -81,6 +88,9 @@ export default {
     }
   },
   methods: {
+    handleGetVerifuUrl() {
+      this.verifyUrl = this.verifyUrl + '?p=' + Date.now()
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''

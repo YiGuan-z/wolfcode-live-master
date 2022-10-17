@@ -2,7 +2,6 @@ package cn.wolfcode.web.controller.user;
 
 import cn.wolfcode.service.IUserService;
 import cn.wolfcode.vo.JsonResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,13 +15,16 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/user")
 public class UserLoginController {
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private HttpSession session;
+    private final IUserService userService;
+    private final HttpSession session;
 
     private static final Integer ERR_NUM=3;
-
+    
+    public UserLoginController(IUserService userService, HttpSession session) {
+        this.userService = userService;
+        this.session = session;
+    }
+    
     @RequestMapping("/login")
     public JsonResult<?> login(String username, String password, String verifyCode) {
         Integer num = (Integer) session.getAttribute("num");

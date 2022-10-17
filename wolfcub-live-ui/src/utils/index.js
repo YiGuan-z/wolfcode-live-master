@@ -119,6 +119,6 @@ export function param2Obj(url) {
 // 表单重置
 export function resetForm(refName) {
   if (this.$refs[refName]) {
-    this.$refs[refName].resetFields();
+    this.$refs[refName].resetFields()
   }
 }

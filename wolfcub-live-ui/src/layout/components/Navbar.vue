@@ -22,9 +22,33 @@
           <el-dropdown-item @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
+          <el-dropdown-item class="user" @click.native="opendialog">
+            <span style="display: block">个人信息修改</span>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <el-dialog
+      title="这里是员工个人信息修改"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <el-form ref="form" :model="userInfo" label-width="80px">
+        <el-form-item label="登陆名">
+          <el-input v-model="userInfo.username" />
+        </el-form-item>
+        <el-form-item label="用户名">
+          <el-input v-model="userInfo.name" />
+        </el-form-item>
+        <el-form-item label="用户头像">
+          <el-input v-model="userInfo.avatar" placeholder="可以放置外部图片链接" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSaveInfo">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -38,10 +62,19 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      dialogVisible: false,
+      userInfo: {}
+    }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'username',
+      'name',
+      'id'
     ])
   },
   methods: {
@@ -51,6 +84,20 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    opendialog() {
+      const { avatar, username, name, id } = this
+      this.userInfo = { avatar, username, name, id }
+      this.dialogVisible = true
+    },
+    async handleSaveInfo() {
+      const code = await this.$store.dispatch('user/updateUserInfo', this.userInfo)
+      if (code === 200) {
+        this.$message.success('修改成功')
+      } else {
+        this.$message.warning('修改失败')
+      }
+      this.dialogVisible = false
     }
   }
 }
@@ -62,7 +109,7 @@ export default {
   overflow: hidden;
   position: relative;
   background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
   .hamburger-container {
     line-height: 46px;
@@ -70,7 +117,7 @@ export default {
     float: left;
     cursor: pointer;
     transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
+    -webkit-tap-highlight-color: transparent;
 
     &:hover {
       background: rgba(0, 0, 0, .025)

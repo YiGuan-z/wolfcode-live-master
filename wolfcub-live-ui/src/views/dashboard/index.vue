@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <panel-group :stat="stat" :loading="loading"></panel-group>
+    <panel-group :stat="stat" :loading="loading" />
   </div>
 </template>
 
@@ -13,11 +13,6 @@ export default {
   components: {
     PanelGroup
   },
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  },
   data() {
     return {
       stat: {
@@ -28,6 +23,11 @@ export default {
       },
       loading: true
     }
+  },
+  computed: {
+    ...mapGetters([
+      'name'
+    ])
   }
 }
 </script>

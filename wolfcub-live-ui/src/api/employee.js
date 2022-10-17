@@ -1,4 +1,5 @@
-import {get, postForm, postJson} from "@/utils/api";
+import { get, postForm, postJson } from '@/utils/api'
+import qs from 'qs'
 
 const module = 'employee'
 
@@ -21,5 +22,5 @@ export function saveOrUpdate(params) {
 }
 
 export function deleteById(id) {
-  return postForm(`/${module}/delete`, qs.stringify({id}))
+  return postForm(`/${module}/delete`, qs.stringify({ id }))
 }

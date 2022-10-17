@@ -61,6 +61,9 @@
 import CountTo from 'vue-count-to'
 
 export default {
+  components: {
+    CountTo
+  },
   props: {
     stat: {
       type: Object,
@@ -71,9 +74,6 @@ export default {
       required: true,
       default: true
     }
-  },
-  components: {
-    CountTo
   }
 }
 </script>

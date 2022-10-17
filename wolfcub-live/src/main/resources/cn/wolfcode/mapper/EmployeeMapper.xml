@@ -27,15 +27,33 @@
     </insert>
     <update id="updateByPrimaryKey">
         update sys_employee
-        set username = #{username},
-            name     = #{name},
-            password = #{password},
-            email    = #{email},
-            age      = #{age},
-            admin    = #{admin},
-            dept_id  = #{dept.id},
-            hireDate = #{hireDate}
-        where id = #{id}
+        <set>
+            <if test="username != null and username != ''">
+                username=#{username},
+            </if>
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="password != null and password != ''">
+                password=#{password},
+            </if>
+            <if test="email != null and email != ''">
+                email=#{email},
+            </if>
+            <if test="age != null">
+                age=#{age},
+            </if>
+            <if test="admin != null">
+                admin=#{admin},
+            </if>
+            <if test="dept.id != null">
+                dept_id=#{dept.id},
+            </if>
+            <if test="hireDate != null">
+                hireDate=#{hireDate},
+            </if>
+        </set>
+        where id=#{id}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         select id,
@@ -72,6 +90,7 @@
             </if>
             <if test="deptIds != null">
                 dept_id in
+
 
                 <foreach collection="deptIds" open="(" separator="," close=")" item="id">
                     #{id}

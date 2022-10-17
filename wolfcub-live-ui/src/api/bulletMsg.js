@@ -1,4 +1,4 @@
-import {get, postForm, postJson} from "@/utils/api";
+import { get, postForm, postJson } from '@/utils/api'
 
 const module = 'bulletMsg'
 
@@ -12,7 +12,7 @@ export function listData(params) {
 }
 
 export function changeStatus(id, status) {
-  return postForm(`/${module}/changeStatus`, {id, status})
+  return postForm(`/${module}/changeStatus`, { id, status })
 }
 
 /**
@@ -21,9 +21,9 @@ export function changeStatus(id, status) {
  * @returns {*}
  */
 export function saveOrUpdate(params) {
-  return postJson(`/${module}/saveOrUpdate`, params);
+  return postJson(`/${module}/saveOrUpdate`, params)
 }
 
 export function deleteById(id) {
-  return postForm(`/${module}/delete`, {id});
+  return postForm(`/${module}/delete`, { id })
 }

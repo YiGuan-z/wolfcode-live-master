@@ -17,30 +17,29 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/file")
 public class FileController {
-
-    @CrossOrigin
-    @RequestMapping("/upload")
-    public String upload(@RequestParam MultipartFile file){
-        String originalFilename = file.getOriginalFilename();
-        //判空
-        String[] split = originalFilename.split("\\.");
-
-
-        String realPath="C:\\Users\\25135\\Desktop\\zu\\wolfcode-live-master\\wolfcub-live\\src\\main\\webapp\\upload";
-        File filepath = new File(realPath);
-
-        if (!filepath.exists()) {
-            filepath.mkdir();
-        }
-
-        try {
-            String path = realPath +"\\"+ UUID.randomUUID()+"."+split[1];
-            System.out.println(path);
-            file.transferTo(new File(path));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "error";
-        }
-        return "success";
-    }
+	@CrossOrigin
+	@RequestMapping("/upload")
+	public String upload(@RequestParam MultipartFile file) {
+		String originalFilename = file.getOriginalFilename();
+		//判空
+		String[] split = originalFilename.split("\\.");
+		//指定文件存储路径
+		//TODO 路径问题之后实现
+		String realPath = "/Users/caseycheng/tmp/SpringProject/wolfcode-live-master/wolfcub-live/src/main/webapp/upload";
+		File filepath = new File(realPath);
+		
+		if (!filepath.exists()) {
+			filepath.mkdir();
+		}
+		
+		try {
+			String path = realPath + "\\" + UUID.randomUUID() + "." + split[1];
+			System.out.println(path);
+			file.transferTo(new File(path));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error";
+		}
+		return "success";
+	}
 }

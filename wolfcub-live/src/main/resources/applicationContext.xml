@@ -26,10 +26,12 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="cn.wolfcode.mapper"/>
     </bean>
+
     <!-- 5. 事务配置 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+
     <!-- 事务注解 -->
     <tx:annotation-driven/>
     <aop:aspectj-autoproxy/>

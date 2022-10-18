@@ -46,7 +46,7 @@
               <el-table-column prop="id" label="编号"/>
               <el-table-column prop="avatar" label="头像">
                 <template v-slot="scope">
-                  <!--                  <el-avatar :src="scope.row.avatar || defaultImgUrl"/>-->
+
                   <el-upload
                     class="avatar-uploader"
                     action="dev-api/file/upload"
@@ -56,8 +56,7 @@
                     :before-upload="beforeAvatarUpload"
                     :data="{id: scope.row.id}"
                   >
-                    <img v-if="scope.row.avatar" :src="scope.row.avatar" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+                    <el-avatar :src="scope.row.avatar"></el-avatar>
                   </el-upload>
 
                 </template>
@@ -226,9 +225,8 @@ export default {
       this.resetForm('editForm')
     },
     handleAvatarSuccess(res, file) {
-      console.log(res)
-      console.log(file)
       this.imageUrl = URL.createObjectURL(file.raw)
+      this.fetchData(this.searchForm)
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
@@ -255,7 +253,7 @@ export default {
     fetchData(params) {
       this.loading = true
       listData(params).then(res => {
-        const { data } = res
+        const {data} = res
         this.searchForm.current = data.current
         this.searchForm.limit = data.limit
         this.total = data.total

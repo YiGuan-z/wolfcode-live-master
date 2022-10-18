@@ -17,7 +17,7 @@ abstract public class TokenManager {
     public static final String TOKEN_NAME = "X-Token";
 
     // ConcurrentHashMap 保障共享资源线程安全问题
-    private static final Map<String, LoginInfo> TOKEN_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, LoginInfo> TOKEN_MAP = new ConcurrentHashMap<>();
 
     public static String getToken() {
         return UUID.randomUUID().toString().replaceAll("-", "");

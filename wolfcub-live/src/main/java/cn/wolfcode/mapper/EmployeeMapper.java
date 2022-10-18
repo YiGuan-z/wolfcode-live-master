@@ -4,6 +4,7 @@ import cn.wolfcode.domain.Employee;
 import cn.wolfcode.qo.QueryObject;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface EmployeeMapper {
@@ -24,4 +25,8 @@ public interface EmployeeMapper {
     Employee selectByUsername(String username);
     
     int resetPassword(@Param("id") Long id, @Param("password") String password);
+
+    Integer selectCountByDate(@Param("minNowTime") Date minNowTime, @Param("maxNowTime") Date maxNowTime);
+
+    Integer selectCountByBulletDate(@Param("minNowTime") Date minNowTime, @Param("maxNowTime") Date maxNowTime);
 }

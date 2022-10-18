@@ -4,6 +4,7 @@ import cn.wolfcode.domain.User;
 import cn.wolfcode.qo.QueryObject;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface UserMapper {
@@ -22,4 +23,6 @@ public interface UserMapper {
     void changeStatus(@Param("id") Long id, @Param("status") String status);
 
     User selectByUsername(String username);
+
+    Integer selectCountByDate(@Param("minNowTime") Date minNowTime, @Param("maxNowTime") Date maxNowTime);
 }

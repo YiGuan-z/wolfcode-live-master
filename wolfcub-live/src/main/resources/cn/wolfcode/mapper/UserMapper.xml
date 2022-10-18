@@ -86,4 +86,10 @@
         from t_user
         where username = #{username}
     </select>
+    <select id="selectCountByDate" resultType="java.lang.Integer">
+        select count(*)
+        from t_user
+        where created_time >= #{minNowTime}
+          and created_time &lt;= #{maxNowTime};
+    </select>
 </mapper>

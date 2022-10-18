@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import '@/assets/styles/element-variables.scss'
 import '@/assets/styles/index.scss'
 import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
-import {resetForm} from './utils'
+import { resetForm } from './utils'
 import plugins from './plugins' // plugins
 
 import '@/styles/index.scss' // global css
@@ -17,7 +17,8 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -38,8 +39,6 @@ Vue.config.productionTip = false
 
 // 全局方法挂载
 Vue.prototype.resetForm = resetForm
-
-
 
 new Vue({
   el: '#app',

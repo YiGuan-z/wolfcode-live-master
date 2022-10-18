@@ -27,3 +27,7 @@ export function saveOrUpdate(params) {
 export function deleteById(id, deleted) {
   return postForm(`/${module}/delete`, { id, deleted })
 }
+
+export function todayData() {
+  return postForm(`/todayData`)
+}

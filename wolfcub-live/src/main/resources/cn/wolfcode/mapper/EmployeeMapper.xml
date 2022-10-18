@@ -87,15 +87,15 @@
     </select>
     <select id="selectForList" resultMap="BaseResultMap">
         select id,
-               avatar,
-               username,
-               name,
-               password,
-               email,
-               age,
-               admin,
-               dept_id,
-               hireDate
+        avatar,
+        username,
+        name,
+        password,
+        email,
+        age,
+        admin,
+        dept_id,
+        hireDate
         from sys_employee
         <include refid="base_where"/>
         limit #{start}, #{limit}
@@ -104,6 +104,18 @@
         select id, name, username, avatar, password
         from sys_employee
         where username = #{username}
+    </select>
+    <select id="selectCountByDate" resultType="java.lang.Integer">
+        select count(*)
+        from sys_employee
+        where hireDate >= #{minNowTime}
+          and hireDate &lt;= #{maxNowTime};
+    </select>
+    <select id="selectCountByBulletDate" resultType="java.lang.Integer">
+        select count(*)
+        from t_bullet_msg
+        where release_time >= #{minNowTime}
+          and release_time &lt;= #{maxNowTime};
     </select>
 
     <update id="resetPassword">

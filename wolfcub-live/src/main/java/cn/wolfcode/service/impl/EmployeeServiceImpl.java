@@ -4,12 +4,20 @@ import cn.wolfcode.domain.Employee;
 import cn.wolfcode.mapper.EmployeeMapper;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IEmployeeService;
+import cn.wolfcode.utils.FormatDateUtils;
 import cn.wolfcode.utils.TokenManager;
 import cn.wolfcode.vo.LoginInfo;
 import cn.wolfcode.vo.Page;
+import cn.wolfcode.vo.Today;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -81,6 +89,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
         BeanUtils.copyProperties(employee, loginInfo);
 
         TokenManager.setInfo(token, loginInfo);
+        System.out.println(TokenManager.TOKEN_NAME);
         // 5. 返回 token
         return token;
     }
@@ -96,5 +105,23 @@ public class EmployeeServiceImpl implements IEmployeeService {
             throw new RuntimeException("更新失败");
         }
         return i;
+    }
+
+    @Override
+    public Today selectByCount() {
+        Today today = new Today();
+        int length = TokenManager.TOKEN_MAP.size();
+
+        //当前在线
+        today.setOnline(length);
+        //今日注册
+        Integer register = mapper.selectCountByDate(FormatDateUtils.minNowTime(), FormatDateUtils.maxNowTime());
+        today.setRegister(register);
+        //今日弹幕
+        Integer barrage = mapper.selectCountByBulletDate(FormatDateUtils.minNowTime(), FormatDateUtils.maxNowTime());
+        today.setBarrage(barrage);
+        //今日举报
+//        mapper.selectCount
+        return today;
     }
 }

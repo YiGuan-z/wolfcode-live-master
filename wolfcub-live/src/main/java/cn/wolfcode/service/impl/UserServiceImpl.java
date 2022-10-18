@@ -4,9 +4,11 @@ import cn.wolfcode.domain.User;
 import cn.wolfcode.mapper.UserMapper;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IUserService;
+import cn.wolfcode.utils.FormatDateUtils;
 import cn.wolfcode.utils.TokenManager;
 import cn.wolfcode.vo.LoginInfo;
 import cn.wolfcode.vo.Page;
+import cn.wolfcode.vo.Today;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,18 @@ public class UserServiceImpl implements IUserService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Today selectByCount() {
+        Today today = new Today();
+        //当前在线
+        //今日注册
+        Integer register = mapper.selectCountByDate(FormatDateUtils.minNowTime(), FormatDateUtils.maxNowTime());
+        today.setRegister(register);
+        //今日弹幕
+        //今日举报
+        return today;
     }
 
     @Override

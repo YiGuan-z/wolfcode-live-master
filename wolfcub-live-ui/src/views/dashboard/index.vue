@@ -1,12 +1,13 @@
 <template>
   <div class="dashboard-container">
-    <panel-group :stat="stat" :loading="loading"></panel-group>
+    <panel-group :stat="stat" :loading="loading" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import PanelGroup from '@/components/PanelGroup'
+import { todayData } from '@/api/user'
 
 export default {
   name: 'Dashboard',
@@ -21,12 +22,29 @@ export default {
   data() {
     return {
       stat: {
-        register: 2837,
-        barrage: 27920,
-        tip_off: 489,
-        online: 1387
+        register: 0,
+        barrage: 0,
+        tip_off: 0,
+        online: 0
       },
-      loading: true
+      loading: true,
+      taskId: null
+    }
+  },
+  mounted() {
+    // 这里模拟后台请求动态变化的数据，每2S改变一次数据
+    this.fetchData()
+    this.taskId = setInterval(this.fetchData, 2000)
+  },
+  beforeDestroy() {
+    clearInterval(this.taskId)
+  },
+  methods: {
+    fetchData() {
+      todayData().then(res => {
+        const { data } = res
+        this.stat = data
+      })
     }
   }
 }
@@ -37,6 +55,7 @@ export default {
   &-container {
     margin: 30px;
   }
+
   &-text {
     font-size: 30px;
     line-height: 46px;

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.LoggingMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.domain.Logging" >
+    <id column="id" property="id" />
+    <result column="user_id" property="userId" />
+    <result column="level" property="level" />
+    <result column="msg" property="msg" />
+    <result column="time" property="time" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" >
+    delete from logging
+    where id = #{id}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+    insert into logging (userId, level, msg, time)
+    values (#{user.id}, #{level}, #{msg}, #{time})
+  </insert>
+  <update id="updateByPrimaryKey" >
+    update logging
+    set userId = #{user.id},
+      level = #{level},
+      msg = #{msg},
+      time = #{time}
+    where id = #{id}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select id, userId, level, msg, time
+    from logging
+    where id = #{id}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, userId, level, msg, time
+    from logging
+  </select>
+
+  <sql id="base_where">
+    <if test="keyword != null and keyword != ''">
+      (level like concat('%',#{keyword},'%'))
+    </if>
+  </sql>
+
+  <select id="selectForCount" resultType="java.lang.Long">
+    select count(*)
+    from logging
+    <include refid="base_where"/>
+  </select>
+  <select id="selectForList" resultMap="BaseResultMap">
+    select *
+    from logging
+    <include refid="base_where"/>
+    limit #{start}, #{limit}
+  </select>
+
+
+</mapper>

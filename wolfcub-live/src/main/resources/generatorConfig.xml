@@ -30,7 +30,7 @@
 
 		<!-- 必须要有的，使用这个配置链接数据库 @TODO:是否可以扩展 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-						connectionURL="jdbc:mysql:///wolfcub_live" userId="root" password="admin">
+						connectionURL="jdbc:mysql:///wolfcub_live_demo" userId="root" password="admin">
 			<!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
 		</jdbcConnection>
 
@@ -81,7 +81,7 @@
 				value=""/> -->
 		</javaClientGenerator>
 
-		<table tableName="t_bullet_msg_sensitive" domainObjectName="BulletMsgSensitive">
+		<table tableName="logging" domainObjectName="Logging">
 			<property name="useActualColumnNames" value="true"/>
 			<property name="constructorBased" value="false" />
 			<generatedKey column="id" sqlStatement="JDBC" />

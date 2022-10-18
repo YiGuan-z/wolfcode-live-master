@@ -85,8 +85,19 @@ export const constantRoutes = [
         name: 'Report',
         component: () => import('@/views/system/report'),
         meta: { title: '举报管理', icon: 'el-icon-document' }
+      },
+      {
+        path: 'video',
+        name: 'Video',
+        component: () => import('@/views/system/video'),
+        meta: { title: '视频管理', icon: 'tree' }
+      },
+      {
+        path: 'logging',
+        name: 'Logging',
+        component: () => import('@/views/system/logging'),
+        meta: { title: '日志管理', icon: 'tree' }
       }
-
     ]
   },
   {

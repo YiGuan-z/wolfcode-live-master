@@ -33,6 +33,9 @@ export function todayData() {
   return postForm(`/todayData`)
 }
 
+// export class updateById {
+// }
+
 export function updateById({ id, name, username, avatar }) {
   return request.post(`/employee/updateInfo`,
     { id, name, username, avatar },

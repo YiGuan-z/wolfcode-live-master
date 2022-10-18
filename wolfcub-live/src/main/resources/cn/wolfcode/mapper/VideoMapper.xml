@@ -15,42 +15,41 @@
         <result column="comments" property="comments"/>
         <result column="views" property="views"/>
         <result column="status" property="status"/>
+        <result column="deleted" property="deleted"/>
         <result column="release_time" property="releaseTime"/>
         <result column="created_time" property="createdTime"/>
         <result column="updated_time" property="updatedTime"/>
     </resultMap>
     <delete id="deleteByPrimaryKey">
-        delete
-        from t_video
+        update t_video
+        set deleted = #{deleted}
         where id = #{id}
     </delete>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into t_video (title, sub_title, description,
                              cover_url, author_id, likes,
-                             coins, shares, comments,
+                             coins, shares, comments,deleted,
                              views, status, release_time, created_time)
         values (#{title}, #{subTitle}, #{description},
                 #{coverUrl}, #{authorId}, #{likes},
-                #{coins}, #{shares}, #{comments},
+                #{coins}, #{shares}, #{comments},#{deleted},
                 #{views}, #{status}, #{releaseTime}, NOW())
     </insert>
-    <update id="updateByPrimaryKey">
-        update t_video
-        set title        = #{title},
-            sub_title    = #{subTitle},
-            description  = #{description},
-            cover_url    = #{coverUrl},
-            author_id    = #{authorId},
-            likes        = #{likes},
-            coins        = #{coins},
-            shares       = #{shares},
-            comments     = #{comments},
-            views        = #{views},
-            status       = #{status},
-            release_time = #{releaseTime},
-            updated_time = NOW()
-        where id = #{id}
-    </update>
+
+    <sql id="base_where">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (username like concat('%', #{keyword}, '%') or nickname like concat('%',#{keyword},'%'))
+            </if>
+            <if test="status != null and status > -1">
+                and status = #{status}
+            </if>
+            and deleted = #{deleted}
+        </where>
+    </sql>
+
+
+    
     <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         select id,
                title,
@@ -64,10 +63,22 @@
                comments,
                views,
                status,
+               deleted,
                release_time,
                created_time,
                updated_time
         from t_video
         where id = #{id}
+    </select>
+    <select id="selectForCount" resultType="java.lang.Long">
+        select count(*)
+        from t_video
+        <include refid="base_where"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        select *
+        from t_video
+        <include refid="base_where"/>
+        limit #{start}, #{limit}
     </select>
 </mapper>

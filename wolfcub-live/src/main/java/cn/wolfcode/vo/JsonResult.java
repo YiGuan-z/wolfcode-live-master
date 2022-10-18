@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.StringJoiner;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,4 +45,14 @@ public class JsonResult<T> {
     public static <T> JsonResult<T> failed(Integer code, String msg) {
         return new JsonResult<>(code, msg, null);
     }
+    
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", JsonResult.class.getSimpleName() + "[", "]")
+                .add("code=" + code)
+                .add("msg='" + msg + "'")
+                .add("data=" + data)
+                .toString();
+    }
 }
+

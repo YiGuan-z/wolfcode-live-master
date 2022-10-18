@@ -49,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
           await store.dispatch('user/getInfo')
 
           // 获取到以后, 才放行
-          next()
+          next({ ...to, replace: true })
         } catch (error) {
           // 如果获取用户信息出错了, 就直接跳回到登录页面, 并重置 token 信息
           await store.dispatch('user/resetToken')

@@ -41,10 +41,10 @@
         </span>
       </el-form-item>
       <!--      <el-form-item prop="verifyUrl">-->
-      <el-image
-        :src="verifyUrl"
-        @click="handleGetVerifuUrl"
-      />
+      <!--      <el-image-->
+      <!--        :src="verifyUrl"-->
+      <!--        @click="handleGetVerifuUrl"-->
+      <!--      />-->
       <!--      </el-form-item>-->
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>

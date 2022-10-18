@@ -25,20 +25,20 @@
       <div class="control-center"></div>
       <!--控制栏右-->
       <div class="control-right">
-<!--        <w-button class="res" type="text" @click="ShowMenu('res')">{{resText}}</w-button>-->
-<!--        <div class="res-menu" v-show="menu.res">-->
-<!--          <div v-if="$parent.original">-->
-<!--            <w-button type="text" @click="SetRes('original')">原始</w-button>-->
-<!--          </div>-->
-<!--          <div v-else>-->
-<!--            <w-button type="text" @click="SetRes('360')">360P</w-button>-->
-<!--            <w-button v-show="$parent.maxRes >= 480" type="text" @click="SetRes(480)">480P</w-button>-->
-<!--            <w-button v-show="$parent.maxRes >= 720" type="text" @click="SetRes(720)">720P</w-button>-->
-<!--            <w-button v-show="$parent.maxRes >= 1080" type="text" @click="SetRes(1080)">1080P</w-button>-->
-<!--          </div>-->
-<!--        </div>-->
+        <w-button class="res" type="text" @click="ShowMenu('res')" style="margin-left: -20px">{{resText}}</w-button>
+        <div class="res-menu" v-show="menu.res">
+          <div v-if="$parent.original">
+            <w-button type="text" @click="SetRes('original')">原始</w-button>
+          </div>
+          <div v-else style="margin-left: -40px">
+            <w-button type="text" @click="SetRes('360')">360P</w-button>
+            <w-button v-show="$parent.maxRes >= 480" type="text" @click="SetRes(480)">480P</w-button>
+            <w-button v-show="$parent.maxRes >= 720" type="text" @click="SetRes(720)">720P</w-button>
+            <w-button v-show="$parent.maxRes >= 1080" type="text" @click="SetRes(1080)">1080P</w-button>
+          </div>
+        </div>
         <w-button class="speed" type="text" @click="ShowMenu('speed')">{{speedText}}</w-button>
-        <div class="speed-menu" v-show="menu.speed">
+        <div class="speed-menu" v-show="menu.speed" style="margin-right: -50px">
           <w-button type="text" @click="SetSpeed(0.5)">0.5X</w-button>
           <w-button type="text" @click="SetSpeed(1)">1.0X</w-button>
           <w-button type="text" @click="SetSpeed(1.5)">1.5X</w-button>

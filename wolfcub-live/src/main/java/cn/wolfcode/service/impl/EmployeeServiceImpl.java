@@ -4,6 +4,7 @@ import cn.wolfcode.domain.Employee;
 import cn.wolfcode.mapper.EmployeeMapper;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IEmployeeService;
+import cn.wolfcode.utils.Log;
 import cn.wolfcode.utils.TokenManager;
 import cn.wolfcode.vo.LoginInfo;
 import cn.wolfcode.vo.Page;
@@ -16,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class EmployeeServiceImpl implements IEmployeeService {
 
-    //private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
+    //private static final LoggerModule log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     private final EmployeeMapper mapper;
 

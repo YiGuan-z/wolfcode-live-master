@@ -1,6 +1,7 @@
 package cn.wolfcode.web.controller;
 
 import cn.wolfcode.service.IEmployeeService;
+import cn.wolfcode.utils.Log;
 import cn.wolfcode.utils.TokenManager;
 import cn.wolfcode.vo.JsonResult;
 import cn.wolfcode.vo.LoginInfo;
@@ -19,6 +20,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/login")
+	@Log(value = "员工登陆接口",level = Log.Level.info)
 	public JsonResult<String> login(String username, String password) {
 		try {
 			// 登录业务
@@ -30,12 +32,14 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/logout")
+	@Log(value = "员工退出",level = Log.Level.tarce)
 	public JsonResult<?> logout(@RequestHeader(value = TokenManager.TOKEN_NAME, required = false) String token) {
 		TokenManager.removeInfo(token);
 		return JsonResult.success();
 	}
 	
 	@PostMapping("/resetPassword")
+	@Log("密码重置")
 	public JsonResult<?> reset(@RequestHeader(value = TokenManager.TOKEN_NAME, required = false) String token,
 							   @RequestBody HashMap<String, String> map) {
 		try {

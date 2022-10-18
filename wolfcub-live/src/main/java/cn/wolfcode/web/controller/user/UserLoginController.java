@@ -1,6 +1,7 @@
 package cn.wolfcode.web.controller.user;
 
 import cn.wolfcode.service.IUserService;
+import cn.wolfcode.utils.Log;
 import cn.wolfcode.vo.JsonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class UserLoginController {
 	}
 	
 	@RequestMapping("/login")
+	@Log(value = "用户登陆接口",level = Log.Level.info)
 	public JsonResult<?> login1(String username, String password, String verifyCode) {
 		var errNum = (Integer) session.getAttribute("errNum");
 		try {

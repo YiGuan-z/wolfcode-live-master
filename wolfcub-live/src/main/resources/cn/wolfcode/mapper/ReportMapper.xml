@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.wolfcode.mapper.ReportMapper" >
+  <resultMap id="BaseResultMap" type="cn.wolfcode.domain.Report" >
+    <id column="id" property="id" />
+    <result column="content" property="reportContent"/>
+    <result column="report_day" property="reportDay" />
+    <result column="status" property="status" />
+
+    <association property="userId" column="user_id" select="cn.wolfcode.mapper.UserMapper.selectByPrimaryKey"/>
+    <association property="bulletId" column="bullet_id" select="cn.wolfcode.mapper.BulletMsgMapper.selectByPrimaryKey"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" >
+    delete from t_report
+    where id = #{id}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+    insert into t_report (user_id, bullet_id, report_day, content, status)
+    values (#{userId.id}, #{bulletId.id}, NOW(), #{reportContent}, #{status})
+  </insert>
+  <insert id="save">
+    insert into t_report (user_id, bullet_id, report_day, content, status)
+    values (#{userId.id}, #{bulletId.id},NOW(), #{reportContent}, 0)
+  </insert>
+  <update id="updateByPrimaryKey">
+    update t_report
+    set userId = #{userId.id},
+      bulletId = #{bulletId.id},
+      content = #{reportContent},
+      status = #{status}
+    where id = #{id}
+  </update>
+  <update id="reportStatus">
+    update t_report
+    set staus = #{status}
+    where id = #{id}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select id, userId, bulletId, reportDay, content, status
+    from t_report
+    where id = #{id}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, userId, bulletId, reportDay, content, status
+    from t_report
+  </select>
+  <sql id="where_if">
+    <where>
+      <if test="keyword != null and keyword != ''">
+            AND u.nickname like concat ('%', #{keyword}, '%')
+      </if>
+    </where>
+  </sql>
+  <select id="selectForCount" resultType="java.lang.Long">
+    select count(*)
+    from t_report r left join t_bullet_msg b on r.bullet_Id = b.id
+    left join t_user u on r.user_id = u.id
+    <include refid="where_if"/>
+  </select>
+  <select id="selectForList" resultMap="BaseResultMap">
+    select r.*, b.content b_content, u.nickname u_nickname
+    from t_report r left join t_bullet_msg b on r.bullet_Id = b.id
+		left join t_user u on r.user_id = u.id
+    <include refid="where_if"/>
+	limit #{start}, #{limit}
+  </select>
+</mapper>

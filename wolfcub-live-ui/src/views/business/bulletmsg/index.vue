@@ -70,6 +70,18 @@
                 </template>
               </el-table-column>
               <el-table-column prop="releaseTime" label="发布时间" />
+              <el-table-column label="操作">
+                <template v-slot="scope">
+                  <el-button
+                    size="mini"
+                    type="text"
+                    icon="el-icon-edit"
+                    style="margin-right: 10px;"
+                    @click="handleEdit(scope.row)"
+                  >举报
+                  </el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </el-row>
           <!-- 分页 -->
@@ -84,6 +96,27 @@
               @current-change="handleCurrentChange"
             />
           </el-row>
+          <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="30%">
+            <el-form
+              ref="editForm"
+              :model="editForm"
+              :rules="rules"
+              status-icon
+              label-width="80px"
+              class="demo-ruleForm"
+            >
+              <el-form-item label="弹幕内容" prop="content">
+                <el-input v-model="editForm.content" :disabled="true" />
+              </el-form-item>
+              <el-form-item label="举报内容" prop="reportContent">
+                <el-input v-model="editForm.reportContent" type="textarea" :rows="2" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="submitForm">提 交</el-button>
+            </div>
+          </el-dialog>
         </el-col>
       </el-row>
     </div>
@@ -91,16 +124,15 @@
 </template>
 
 <script>
-import { changeStatus, listData } from '@/api/bulletMsg'
+import { changeStatus, listData, save } from '@/api/bulletMsg'
 
 export default {
-  name: 'User',
+  name: 'BulletMsg',
   filters: {
     secondsFormat(seconds) {
       if (!seconds) {
         return '00:00:00'
       }
-
       let h = parseInt(seconds / 60 / 60 % 24)
       h = h < 10 ? '0' + h : h
       let m = parseInt(seconds / 60 % 60)
@@ -121,7 +153,22 @@ export default {
   },
   data() {
     return {
+      dialogTitle: '',
+      dialogFormVisible: false,
+      editForm: {
+        nickname: '',
+        dept: {},
+        gender: 0,
+        status: '0',
+        content: '',
+        reportBullet: '',
+        reportContent: '',
+        userId: null
+      },
       statusList: [{ value: 0, label: '正常' }, { value: 1, label: '禁用' }],
+      rules: {
+        'reportContent': [{ required: true, message: '举报内容不能为空' }]
+      },
       total: 0,
       tableData: [],
       loading: true,
@@ -147,6 +194,22 @@ export default {
       }).catch(function() {
         row.status = row.status === '0' ? '1' : '0'
       })
+    },
+    submitForm() {
+      // 增加表单校验拦截, 如果表单校验不通过, 不应该关闭弹窗
+      this.$refs.editForm.validate()
+        .then(valid => {
+          // 获取到当前的表单数据, 并发送请求到后台
+          save(this.editForm)
+            .then(res => {
+              // 保存成功后重新刷新表格
+              this.fetchData()
+              // 提示用户保存成功
+              this.$message.success('操作成功!')
+              // 隐藏弹框
+              this.dialogFormVisible = false
+            })
+        })
     },
     fetchData(params) {
       this.loading = true
@@ -177,6 +240,21 @@ export default {
     resetQuery() {
       this.resetForm('searchForm')
       this.handleQuery()
+    },
+    handleEdit(data) {
+      // 点击编辑按钮触发
+      // 1. 修改标题为 编辑用户
+      this.dialogTitle = '举报用户'
+      const { author, id, content } = data
+      // 2. 将表单的数据清空]
+      const { id: ids } = author
+      this.editForm = {
+        content,
+        userId: { id: ids },
+        bulletId: { id }
+      }
+      // 3. 显示对话框
+      this.dialogFormVisible = true
     }
   }
 }

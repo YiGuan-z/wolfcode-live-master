@@ -2,7 +2,6 @@ import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import { updateById } from '@/api/user'
-import da from 'element-ui/src/locale/lang/da'
 
 const getDefaultState = () => {
   return {

@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author 代星宇
+ * @content 用户注册
  * @date 2022/10/16 17:06
  * @Version cn.wolfcode.web.controller
  */
 @RestController("/register")
 public class RegisterController {
-    @Autowired
-    private IUserService userService;
-
+    private final IUserService userService;
+    
+    public RegisterController(IUserService userService) {
+        this.userService = userService;
+    }
+    
     /**
      * 查重
      */
@@ -29,7 +33,7 @@ public class RegisterController {
 
     /**
      * 注册
-     * @param 用户名
+     * @param user 用户对象
      * @return 修改成功
      */
     @RequestMapping("/save")

@@ -69,7 +69,8 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      verifyUrl: '/dev-api/verifyCode'
     }
   },
   watch: {
@@ -81,6 +82,9 @@ export default {
     }
   },
   methods: {
+    handleGetVerifuUrl() {
+      this.verifyUrl = this.verifyUrl + '?p=' + Date.now()
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''

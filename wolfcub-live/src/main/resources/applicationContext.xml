@@ -34,8 +34,8 @@
 
     <!-- 事务注解 -->
     <tx:annotation-driven/>
-    <aop:aspectj-autoproxy/>
-<!--    <bean class="cn.wolfcode.utils.Logger" id="log"/>-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+<!--    <bean class="cn.wolfcode.utils.LoggerModule" id="log"/>-->
 <!--    <aop:config>-->
 <!--        <aop:pointcut id="logger" expression="execution(* cn.wolfcode.service.*Service.*(..))"/>-->
 <!--        <aop:advisor advice-ref="log" pointcut-ref="logger"/>-->
@@ -46,5 +46,5 @@
         <property name="serverPort" value="${netty.server-port}"/>
     </bean>
 
-    <context:component-scan base-package="cn.wolfcode.service"/>
+    <context:component-scan base-package="cn.wolfcode"/>
 </beans>

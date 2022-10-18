@@ -76,6 +76,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/drawing',
+    name: 'Drawing',
+    component: Layout,
+    children: [
+      {
+        path: 'draw',
+        name: 'Draw',
+        component: () => import('@/views/drawing'),
+        meta: { title: '图片管理', icon: 'image' }
+      }
+    ]
+  },
 
   {
     path: '/layout',

@@ -14,11 +14,6 @@ export default {
   components: {
     PanelGroup
   },
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  },
   data() {
     return {
       stat: {
@@ -30,6 +25,11 @@ export default {
       loading: true,
       taskId: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'name'
+    ])
   },
   mounted() {
     // 这里模拟后台请求动态变化的数据，每2S改变一次数据

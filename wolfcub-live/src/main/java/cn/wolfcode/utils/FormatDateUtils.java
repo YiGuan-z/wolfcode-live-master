@@ -1,6 +1,5 @@
 package cn.wolfcode.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,15 +12,15 @@ public class FormatDateUtils {
 
 
     public static Date maxNowTime(){
-        return format(23,59,59);
+        return setTime(23,59,59);
     }
 
     public static Date minNowTime(){
-        return format(0,0,0);
+        return setTime(0,0,0);
     }
 
 
-    public static Date format(int hour,int minute,int second){
+    public static Date setTime(int hour, int minute, int second){
         Date date = new Date();
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);

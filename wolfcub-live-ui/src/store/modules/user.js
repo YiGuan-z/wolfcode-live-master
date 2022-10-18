@@ -1,12 +1,16 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import { updateById } from '@/api/user'
+import da from 'element-ui/src/locale/lang/da'
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    username: '',
+    id: ''
   }
 }
 
@@ -24,6 +28,12 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_USERNAME: (state, username) => {
+    state.username = username
+  },
+  SET_ID: (state, id) => {
+    state.id = id
   }
 }
 
@@ -68,10 +78,11 @@ const actions = {
         }
 
         // 从用户对象中获取用户名与头像
-        const { name, avatar } = data
-
+        const { name, avatar, username, id } = data
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
+        commit('SET_USERNAME', username)
+        commit('SET_ID', id)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -99,6 +110,28 @@ const actions = {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+  // 处理用户信息更新
+  updateUserInfo({ commit }, userInfo) {
+    const { avatar, username, name, id } = userInfo
+    return new Promise((resolve, reject) => {
+      updateById({ id, name, username, avatar })
+        .then(value => {
+          const { data } = value
+          if (!data) {
+            return reject('修改失败，请稍后在世')
+          }
+          const { avatar, id, name, username } = data
+          commit('SET_ID', id)
+          commit('SET_NAME', name)
+          commit('SET_USERNAME', username)
+          commit('SET_AVATAR', avatar)
+          resolve(value['code'])
+        })
+        .catch(err => {
+          reject(err)
+        })
     })
   }
 }

@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
-import {getToken} from '@/utils/auth'
+import { getToken } from '@/utils/auth'
 
 const DEFAULT_ERROR_MSG = '服务器繁忙'
 
@@ -50,7 +50,6 @@ service.interceptors.response.use(
 
       // 401: 当前用户未登录
       if (res.code === 401) {
-
         // TODO Vuex => Vue 组件状态(数据)管理
         store.dispatch('user/resetToken').then(() => {
           // 刷新页面

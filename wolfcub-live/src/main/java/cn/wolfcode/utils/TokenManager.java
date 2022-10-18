@@ -1,10 +1,9 @@
 package cn.wolfcode.utils;
 
-import cn.wolfcode.domain.Employee;
 import cn.wolfcode.vo.LoginInfo;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +16,7 @@ abstract public class TokenManager {
     public static final String TOKEN_NAME = "X-Token";
 
     // ConcurrentHashMap 保障共享资源线程安全问题
-    public static final Map<String, LoginInfo> TOKEN_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, LoginInfo> TOKEN_MAP = new ConcurrentHashMap<>();
 
     public static String getToken() {
         return UUID.randomUUID().toString().replaceAll("-", "");
@@ -26,6 +25,21 @@ abstract public class TokenManager {
     public static void setInfo(String token, LoginInfo employee) {
         // 并发访问 map
         TOKEN_MAP.put(token, employee);
+    }
+
+    public static Integer getSize(){
+       return TokenManager.TOKEN_MAP.size();
+    }
+
+    public static void logged(String username){
+        Map<String, LoginInfo> tokenMap = TokenManager.TOKEN_MAP;
+        Set<String> keySet=tokenMap.keySet();
+        for (String key : keySet) {
+            LoginInfo loginInfo = tokenMap.get(key);
+            if (loginInfo.getUsername().equals(username)) {
+                throw new RuntimeException("用户已登录！！！");
+            }
+        }
     }
 
     public static LoginInfo getInfo(String token) {

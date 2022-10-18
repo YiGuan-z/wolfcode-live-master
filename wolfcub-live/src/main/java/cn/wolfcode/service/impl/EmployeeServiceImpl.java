@@ -16,9 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -69,6 +67,8 @@ public class EmployeeServiceImpl implements IEmployeeService {
 
     @Override
     public String login(String username, String password) {
+        //判段是否重复登录
+        TokenManager.logged(username);
         // 1. 基于用户名去数据库查询用户信息
         Employee employee = mapper.selectByUsername(username);
         // 2. 如果信息不存在, 提示用户名或密码错误
@@ -110,7 +110,7 @@ public class EmployeeServiceImpl implements IEmployeeService {
     @Override
     public Today selectByCount() {
         Today today = new Today();
-        int length = TokenManager.TOKEN_MAP.size();
+        int length = TokenManager.getSize();
 
         //当前在线
         today.setOnline(length);

@@ -33,8 +33,9 @@ export default {
   },
   mounted() {
     // 这里模拟后台请求动态变化的数据，每2S改变一次数据
+    //  时间长一点啊，你这是在手动DDOS
     this.fetchData()
-    this.taskId = setInterval(this.fetchData, 2000)
+    this.taskId = setInterval(this.fetchData, 100_000)
   },
   beforeDestroy() {
     clearInterval(this.taskId)

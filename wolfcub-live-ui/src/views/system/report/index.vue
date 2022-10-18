@@ -36,43 +36,17 @@
               <el-table-column prop="userId.nickname" label="被举报的用户" />
               <el-table-column prop="reportDay" label="举报时间" />
               <el-table-column prop="reportContent" label="举报内容" />
-              <el-table-column prop="status" label="状态">
+              <el-table-column prop="status" label="选项">
                 <template v-slot="scope">
-                  <el-switch
-                    v-model="scope.row.status"
-                    active-value="0"
-                    inactive-value="1"
-                    @change="handleStatusChange(scope.row)"
-                  />
+                  <!--TODO 审核管理                  -->
+                  <el-button
+                    title="审核"
+                    type="danger"
+                    plain
+                    @click="handleStatusChange(scope.row)"
+                  >审核</el-button>
                 </template>
               </el-table-column>
-              <!--          <el-table-column label="操作">
-                <template v-slot="scope">
-                  <el-button
-                    size="mini"
-                    type="text"
-                    icon="el-icon-edit"
-                    style="margin-right: 10px;"
-                    @click="handleEdit(scope.row)">编辑
-                  </el-button>
-                  &lt;!&ndash;<el-popconfirm
-                    confirm-button-text='确认'
-                    cancel-button-text='取消'
-                    @confirm="handleDelete(scope.row.id)"
-                    @onConfirm="handleDelete(scope.row.id)"
-                    icon="el-icon-info"
-                    icon-color="red"
-                    title="这是一段内容确定要删除吗？"
-                  >
-                    <el-button
-                      size="mini"
-                      type="text"
-                      icon="el-icon-delete"
-                      slot="reference">删除
-                    </el-button>
-                  </el-popconfirm>&ndash;&gt;
-                </template>
-              </el-table-column>-->
             </el-table>
           </el-row>
           <!-- 分页 -->
@@ -119,8 +93,7 @@ export default {
       status: '0',
       dialogTitle: '',
       dialogFormVisible: false,
-      editForm: {
-      },
+      editForm: {},
       filterText: '',
       defaultProps: {
         children: 'children',
@@ -135,12 +108,11 @@ export default {
         limit: 3
       },
       statusList:
-          [
-            { value: 0, label: '已提交' },
-            { value: 1, label: '已处理' }
-          ],
-      rules: {
-      }
+        [
+          { value: 0, label: '已提交' },
+          { value: 1, label: '已处理' }
+        ],
+      rules: {}
     }
   },
   watch: {
@@ -172,8 +144,7 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     reset() {
-      this.editForm = {
-      }
+      this.editForm = {}
       this.resetForm('editForm')
     },
     fetchData(params) {
@@ -264,12 +235,12 @@ export default {
     2. lang: 可以描述里面的内容是 css/less/sass/scss
 -->
 <style lang="css" scoped>
-  .line {
-    text-align: center;
-  }
+.line {
+  text-align: center;
+}
 
-  .el-pagination {
-    text-align: right;
-  }
+.el-pagination {
+  text-align: right;
+}
 </style>
 

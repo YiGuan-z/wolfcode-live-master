@@ -6,7 +6,6 @@
     <result column="content" property="reportContent"/>
     <result column="report_day" property="reportDay" />
     <result column="status" property="status" />
-
     <association property="userId" column="user_id" select="cn.wolfcode.mapper.UserMapper.selectByPrimaryKey"/>
     <association property="bulletId" column="bullet_id" select="cn.wolfcode.mapper.BulletMsgMapper.selectByPrimaryKey"/>
   </resultMap>

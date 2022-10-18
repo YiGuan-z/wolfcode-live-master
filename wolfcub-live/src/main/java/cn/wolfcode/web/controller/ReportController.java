@@ -5,6 +5,7 @@ import cn.wolfcode.domain.BulletMsg;
 import cn.wolfcode.domain.Report;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IReportService;
+import cn.wolfcode.utils.Log;
 import cn.wolfcode.vo.JsonResult;
 import cn.wolfcode.vo.Page;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ public class ReportController {
         }
         return JsonResult.success();
     }
+    @Log(value = "更改用户信息",level = Log.Level.info)
     @RequestMapping("/reportStatus")
     public JsonResult<?> reportStatus(Long id, Integer status) {
         reportService.reportStatus(id, status);

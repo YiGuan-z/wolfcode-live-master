@@ -19,7 +19,7 @@ export default {
       stat: {
         register: 0,
         barrage: 0,
-        tip_off: 0,
+        tipOff: 0,
         online: 0
       },
       loading: true,

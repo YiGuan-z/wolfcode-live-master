@@ -69,8 +69,9 @@ public class Logger {
 					if (methodName.equals("login")) {
 						final var token = (String) ((JsonResult<?>) target).getData();
 						final var info = TokenManager.getInfo(token);
+						final var host = request.getRemoteHost();
 						service.save(LoggerModule.of(level.name(),
-								String.format("%s用户已在%s登陆", JSON.toJSONString(args[0]), request.getRequestURL())
+								String.format("%s用户已在%s登陆主机为%s", JSON.toJSONString(args[0]), request.getRequestURL(), host)
 								, info.getId()));
 					} else {
 						final Object data = ((JsonResult<?>) target).getData();
@@ -80,7 +81,12 @@ public class Logger {
 				}
 			}
 		} catch (Throwable throwable) {
-			final var loggerModule = LoggerModule.of(Log.Level.error.name(), throwable.getMessage());
+			StringBuffer buffer = new StringBuffer();
+			final var trace = throwable.getStackTrace();
+			for (StackTraceElement element : trace) {
+				buffer.append(element.toString());
+			}
+			final var loggerModule = LoggerModule.of(Log.Level.error.name(), buffer.toString());
 			service.save(loggerModule);
 		}
 		return target;

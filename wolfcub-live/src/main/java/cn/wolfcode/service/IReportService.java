@@ -7,5 +7,6 @@ public interface IReportService extends IService<Report, Long> {
     void reportSave(Report obj);
 
     void reportStatus(Long id, Integer status);
-    Report selectInfoByPrimaryKey(Long id);
+    //通过id获取审批数据
+     Report selectInfoByPrimaryKey(Long id);
 }

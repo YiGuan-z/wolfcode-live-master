@@ -82,6 +82,8 @@ public class UserServiceImpl implements IUserService {
         today.setRegister(register);
         //今日弹幕
         //今日举报
+        Integer tipOff = mapper.selectCountByTipOffDate(FormatDateUtils.minNowTime(), FormatDateUtils.maxNowTime());
+        today.setTipOff(tipOff);
         return today;
     }
 

@@ -27,7 +27,7 @@ public class LoginController {
 			String token = employeeService.login(username, password);
 			return JsonResult.success(token);
 		} catch (Exception e) {
-			return JsonResult.failed(400, e.getMessage());
+			return JsonResult.failed(401, e.getMessage());
 		}
 	}
 	

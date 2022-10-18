@@ -102,4 +102,10 @@
         from t_user
         where username = #{username}
     </select>
+    <select id="selectCountByTipOffDate" resultType="java.lang.Integer">
+        select count(*)
+        from t_report
+        where report_day >= #{minNowTime}
+          and report_day &lt;= #{maxNowTime};
+    </select>
 </mapper>

@@ -49,7 +49,7 @@
             <div class="card-panel-text">
               今日举报
             </div>
-            <count-to :start-val="0" :end-val="stat.tip_off" :duration="1" class="card-panel-num" />
+            <count-to :start-val="0" :end-val="stat.tipOff" :duration="1" class="card-panel-num" />
           </div>
         </div>
       </el-col>
@@ -120,13 +120,13 @@ export default {
     // 监听 stat 值的变动
     this.$watch('stat', (n, o) => {
       // 每次 stat 变动前的值 = 0，变动后的值 = n
-      this.option.series[0].data = [n.online, n.register, n.barrage, n.tip_off]
+      this.option.series[0].data = [n.online, n.register, n.barrage, n.tipOff]
     })
     this.chart = echarts.init(this.$refs.chartEl)
     this.chart.setOption(this.option)
     // 这里模拟后台请求动态变化的数据，每2S改变一次数据
     this.changeOption()
-    this.taskId = setInterval(this.changeOption, 2000)
+    this.taskId = setInterval(this.changeOption, 5000)
   },
   beforeDestroy() {
     clearInterval(this.taskId)

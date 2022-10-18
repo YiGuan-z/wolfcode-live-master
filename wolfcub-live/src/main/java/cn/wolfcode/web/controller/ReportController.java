@@ -1,7 +1,6 @@
 package cn.wolfcode.web.controller;
 
 
-import cn.wolfcode.domain.BulletMsg;
 import cn.wolfcode.domain.Report;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IReportService;

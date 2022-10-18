@@ -12,4 +12,6 @@ public interface IUserService extends IService<User, Long> {
     Boolean repetition(String username);
 
     Today selectByCount();
+
+    void updateByFile(String pathJsp, Long id);
 }

@@ -86,6 +86,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void updateByFile(String pathJsp, Long id) {
+        mapper.updateByFile(pathJsp,id);
+    }
+
+    @Override
     public String login(String username, String password, String verifyCode, String code) {
         // 1. 基于用户名去数据库查询用户信息
         User user = mapper.selectByUsername(username);

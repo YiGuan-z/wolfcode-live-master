@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { changeStatus, listData, save } from '@/api/bulletMsg'
+import { changeStatus, listData, saveOrUpdate } from '@/api/bulletMsg'
 
 export default {
   name: 'BulletMsg',
@@ -153,22 +153,7 @@ export default {
   },
   data() {
     return {
-      dialogTitle: '',
-      dialogFormVisible: false,
-      editForm: {
-        nickname: '',
-        dept: {},
-        gender: 0,
-        status: '0',
-        content: '',
-        reportBullet: '',
-        reportContent: '',
-        userId: null
-      },
       statusList: [{ value: 0, label: '正常' }, { value: 1, label: '禁用' }],
-      rules: {
-        'reportContent': [{ required: true, message: '举报内容不能为空' }]
-      },
       total: 0,
       tableData: [],
       loading: true,
@@ -200,7 +185,7 @@ export default {
       this.$refs.editForm.validate()
         .then(valid => {
           // 获取到当前的表单数据, 并发送请求到后台
-          save(this.editForm)
+          saveOrUpdate(this.editForm)
             .then(res => {
               // 保存成功后重新刷新表格
               this.fetchData()

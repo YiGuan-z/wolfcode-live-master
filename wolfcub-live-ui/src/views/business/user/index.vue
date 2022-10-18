@@ -46,7 +46,20 @@
               <el-table-column prop="id" label="编号" />
               <el-table-column prop="avatar" label="头像">
                 <template v-slot="scope">
-                  <el-avatar :src="scope.row.avatar || defaultImgUrl" />
+                  <!--                  <el-avatar :src="scope.row.avatar || defaultImgUrl"/>-->
+                  <el-upload
+                    class="avatar-uploader"
+                    action="dev-api/file/upload"
+                    :headers="upHeader"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload"
+                    :data="{id: scope.row.id}"
+                  >
+                    <img v-if="scope.row.avatar" :src="scope.row.avatar" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon" />
+                  </el-upload>
+
                 </template>
               </el-table-column>
               <el-table-column prop="username" label="用户名" />
@@ -152,6 +165,7 @@
 
 <script>
 import { changeUserStatus, deleteById, listData, saveOrUpdate } from '@/api/user'
+import { getToken } from '@/utils/auth'
 
 export default {
   name: 'User',
@@ -168,6 +182,10 @@ export default {
   },
   data() {
     return {
+      imageUrl: '',
+      upHeader: {
+        'X-Token': getToken()
+      },
       dialogTitle: '',
       dialogFormVisible: false,
       editForm: {
@@ -207,6 +225,23 @@ export default {
       }
       this.resetForm('editForm')
     },
+    handleAvatarSuccess(res, file) {
+      console.log(res)
+      console.log(file)
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
     handleStatusChange(row) {
       const text = row.status === '0' ? '启用' : '禁用'
       this.$modal.confirm('确认要"' + text + '""' + (row.nickname || row.username) + '"用户吗？').then(function() {
@@ -224,7 +259,12 @@ export default {
         this.searchForm.current = data.current
         this.searchForm.limit = data.limit
         this.total = data.total
-        this.tableData = data.list
+        this.tableData = data.list.map(value => {
+          return {
+            ...value,
+            avatar: `/dev-api${value.avatar}`
+          }
+        })
         this.loading = false
       })
     },
@@ -303,11 +343,11 @@ export default {
     2. lang: 可以描述里面的内容是 css/less/sass/scss
 -->
 <style lang="css" scoped>
-  .line {
-    text-align: center;
-  }
+.line {
+  text-align: center;
+}
 
-  .el-pagination {
-    text-align: right;
-  }
+.el-pagination {
+  text-align: right;
+}
 </style>

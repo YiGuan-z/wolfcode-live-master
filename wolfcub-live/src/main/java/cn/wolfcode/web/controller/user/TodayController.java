@@ -30,7 +30,7 @@ public class TodayController {
         //TODO 这里弹幕数据可能没对齐
         todayData.setRegister(todayEmployeeData.getRegister()+todayUserData.getRegister());
         todayData.setBarrage(todayEmployeeData.getBarrage());
-        todayData.setTipOff(todayEmployeeData.getTipOff());
+        todayData.setTipOff(todayUserData.getTipOff());
         todayData.setOnline(todayEmployeeData.getOnline());
         return JsonResult.success(todayData);
     }

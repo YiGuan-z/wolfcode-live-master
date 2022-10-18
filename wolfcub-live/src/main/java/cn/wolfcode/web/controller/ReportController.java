@@ -24,6 +24,9 @@ public class ReportController {
 
     @RequestMapping("/list")
     private JsonResult<Page<Report>> list(QueryObject qo) {
+        if(qo==null){
+            qo=new QueryObject();
+        }
         return JsonResult.success(reportService.query(qo));
     }
 

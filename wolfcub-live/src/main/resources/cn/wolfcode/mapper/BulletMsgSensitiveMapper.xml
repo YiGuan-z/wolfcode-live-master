@@ -14,8 +14,8 @@
         where id = #{id}
     </delete>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        insert into t_bullet_msg_sensitive (sensitive_msg, show_msg, create_time, update_time)
-        values (#{sensitiveMsg}, #{showMsg}, #{createTime}, #{updateTime})
+        insert into t_bullet_msg_sensitive (id,sensitive_msg, show_msg, create_time)
+        values (null,#{sensitiveMsg}, #{showMsg}, now())
     </insert>
     <update id="updateByPrimaryKey">
         update t_bullet_msg_sensitive
@@ -33,5 +33,29 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select id, sensitive_msg, show_msg, create_time, update_time
         from t_bullet_msg_sensitive
+    </select>
+    <sql id="where_if">
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND sensitive_msg like concat('%', #{keyword}, '%')
+            </if>
+            <if test="beginTime != null">
+                AND create_time >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                AND create_time &lt;= #{endTime}
+            </if>
+        </where>
+    </sql>
+    <select id="selectForCount" resultType="java.lang.Long">
+        select count(*)
+        from t_bullet_msg_sensitive
+        <include refid="where_if"/>
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        select id, sensitive_msg, show_msg, create_time, update_time
+        from t_bullet_msg_sensitive
+        <include refid="where_if"/>
+        limit #{start}, #{limit}
     </select>
 </mapper>

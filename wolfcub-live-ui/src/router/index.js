@@ -73,7 +73,20 @@ export const constantRoutes = [
         name: 'Department',
         component: () => import('@/views/system/department'),
         meta: { title: '部门管理', icon: 'tree' }
+      },
+      {
+        path: 'bulletMsgSensitive',
+        name: 'BulletMsgSensitive',
+        component: () => import('@/views/system/bulletMsgSendsitive'),
+        meta: { title: '敏感词管理', icon: 'el-icon-document' }
+      },
+      {
+        path: 'report',
+        name: 'Report',
+        component: () => import('@/views/system/report'),
+        meta: { title: '举报管理', icon: 'el-icon-document' }
       }
+
     ]
   },
   {

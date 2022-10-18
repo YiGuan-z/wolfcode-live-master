@@ -4,58 +4,58 @@
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" :loading="loading">
           <div class="card-panel-icon-wrapper icon-shopping">
-            <svg-icon icon-class="apply" class-name="card-panel-icon"/>
+            <svg-icon icon-class="apply" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               当前在线
             </div>
-            <count-to :start-val="0" :end-val="stat.online" :duration="1" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="stat.online" :duration="1" class="card-panel-num" />
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" :loading="stat.loading">
           <div class="card-panel-icon-wrapper icon-people">
-            <svg-icon icon-class="peoples" class-name="card-panel-icon"/>
+            <svg-icon icon-class="peoples" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               今日注册
             </div>
-            <count-to :start-val="0" :end-val="stat.register" :duration="1" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="stat.register" :duration="1" class="card-panel-num" />
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" :loading="loading">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon icon-class="chart" class-name="card-panel-icon"/>
+            <svg-icon icon-class="chart" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               今日弹幕
             </div>
-            <count-to :start-val="0" :end-val="stat.barrage" :duration="1" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="stat.barrage" :duration="1" class="card-panel-num" />
           </div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
         <div class="card-panel" :loading="loading">
           <div class="card-panel-icon-wrapper icon-money">
-            <svg-icon icon-class="dict" class-name="card-panel-icon"/>
+            <svg-icon icon-class="dict" class-name="card-panel-icon" />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
               今日举报
             </div>
-            <count-to :start-val="0" :end-val="stat.tip_off" :duration="1" class="card-panel-num"/>
+            <count-to :start-val="0" :end-val="stat.tip_off" :duration="1" class="card-panel-num" />
           </div>
         </div>
       </el-col>
     </el-row>
     <el-row :gutter="40" style="border: 1px solid red">
-      <div ref="chartEl" style="height:400px;width: 100%"/>
+      <div ref="chartEl" style="height:400px;width: 100%" />
     </el-row>
   </div>
 </template>

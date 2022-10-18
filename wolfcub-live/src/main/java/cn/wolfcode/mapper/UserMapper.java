@@ -1,12 +1,12 @@
 package cn.wolfcode.mapper;
 
 import cn.wolfcode.domain.User;
+
 import cn.wolfcode.qo.QueryObject;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
-
 public interface UserMapper {
     int deleteByPrimaryKey(@Param("id") Long id, @Param("deleted") boolean deleted);
 

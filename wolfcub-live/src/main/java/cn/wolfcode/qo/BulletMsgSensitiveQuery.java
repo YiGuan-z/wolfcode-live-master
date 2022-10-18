@@ -1,4 +1,4 @@
-package cn.wolfcode.domain;
+package cn.wolfcode.qo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -9,14 +9,13 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class BulletMsgSensitive {
-    private Long id;
-    private String sensitiveMsg;
-    private String showMsg;
+public class BulletMsgSensitiveQuery extends QueryObject {
+
+    //创建时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private Date beginTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    private Date endTime;
 }

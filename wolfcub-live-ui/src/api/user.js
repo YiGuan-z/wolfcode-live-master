@@ -1,4 +1,5 @@
 import { get, postForm, postJson } from '@/utils/api'
+import request from '@/utils/request'
 
 const module = 'user'
 
@@ -30,4 +31,12 @@ export function deleteById(id, deleted) {
 
 export function todayData() {
   return postForm(`/todayData`)
+}
+
+export function updateById({ id, name, username, avatar }) {
+  return request.post(`/employee/updateInfo`,
+    { id, name, username, avatar },
+    {
+      method: 'post'
+    })
 }

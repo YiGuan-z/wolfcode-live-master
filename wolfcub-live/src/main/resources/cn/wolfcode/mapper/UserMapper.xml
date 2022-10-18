@@ -86,8 +86,8 @@
         from t_user
         <include refid="base_where"/>
     </select>
-    <select id="selectByUsername" resultMap="BaseResultMap">
-        select *
+    <select id="selectForUsername" resultMap="BaseResultMap">
+        select username
         from t_user
         where username = #{username}
     </select>
@@ -95,6 +95,11 @@
         select count(*)
         from t_user
         where created_time >= #{minNowTime}
-          and created_time &lt;= #{maxNowTime};
+        and created_time &lt;= #{maxNowTime};
+    </select>
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select *
+        from t_user
+        where username = #{username}
     </select>
 </mapper>

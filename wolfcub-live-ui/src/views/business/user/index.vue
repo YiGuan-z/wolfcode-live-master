@@ -7,7 +7,7 @@
           <el-row>
             <el-form ref="searchForm" :inline="true" size="mini" :model="searchForm" class="demo-form-inline">
               <el-form-item label="关键字">
-                <el-input v-model="searchForm.keyword" placeholder="请输入用户名/昵称" />
+                <el-input v-model="searchForm.keyword" placeholder="请输入用户名/昵称"/>
               </el-form-item>
               <el-form-item label="状态">
                 <el-select v-model="searchForm.status" clearable>
@@ -43,20 +43,33 @@
           <!-- 表格 -->
           <el-row>
             <el-table v-loading="loading" stripe :data="tableData">
-              <el-table-column prop="id" label="编号" />
+              <el-table-column prop="id" label="编号"/>
               <el-table-column prop="avatar" label="头像">
                 <template v-slot="scope">
-                  <el-avatar :src="scope.row.avatar || defaultImgUrl" />
+                  <!--                  <el-avatar :src="scope.row.avatar || defaultImgUrl"/>-->
+                  <el-upload
+                    class="avatar-uploader"
+                    action="dev-api/file/upload"
+                    :headers="upHeader"
+                    :show-file-list="false"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload"
+                    :data="{id: scope.row.id}"
+                  >
+                    <img v-if="scope.row.avatar" :src="scope.row.avatar" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+                  </el-upload>
+
                 </template>
               </el-table-column>
-              <el-table-column prop="username" label="用户名" />
-              <el-table-column prop="nickname" label="昵称" />
+              <el-table-column prop="username" label="用户名"/>
+              <el-table-column prop="nickname" label="昵称"/>
               <el-table-column prop="gender" label="性别">
                 <template v-slot="scope">
                   {{ scope.row.gender | genderFilter }}
                 </template>
               </el-table-column>
-              <el-table-column prop="signature" label="个性签名" :show-overflow-tooltip="true" />
+              <el-table-column prop="signature" label="个性签名" :show-overflow-tooltip="true"/>
               <el-table-column prop="status" label="状态">
                 <template v-slot="scope">
                   <el-switch
@@ -67,8 +80,8 @@
                   />
                 </template>
               </el-table-column>
-              <el-table-column prop="createdTime" label="创建时间" />
-              <el-table-column prop="updatedTime" label="更新时间" />
+              <el-table-column prop="createdTime" label="创建时间"/>
+              <el-table-column prop="updatedTime" label="更新时间"/>
               <el-table-column label="操作">
                 <template v-slot="scope">
                   <el-button
@@ -117,12 +130,12 @@
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="editForm" :model="editForm" :rules="rules" status-icon label-width="80px" class="demo-ruleForm">
-        <el-input v-show="false" v-model="editForm.id" type="hidden" />
+        <el-input v-show="false" v-model="editForm.id" type="hidden"/>
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="editForm.nickname" type="name" autocomplete="off" />
+          <el-input v-model="editForm.nickname" type="name" autocomplete="off"/>
         </el-form-item>
         <el-form-item label="用户名" prop="username">
-          <el-input v-model="editForm.username" type="username" autocomplete="off" />
+          <el-input v-model="editForm.username" type="username" autocomplete="off"/>
         </el-form-item>
         <el-form-item label="性别" prop="gender">
           <el-radio-group v-model="editForm.gender" size="small">
@@ -139,7 +152,7 @@
           />
         </el-form-item>
         <el-form-item label="个性签名" prop="signature">
-          <el-input v-model="editForm.signature" type="textarea" :rows="2" />
+          <el-input v-model="editForm.signature" type="textarea" :rows="2"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -151,7 +164,8 @@
 </template>
 
 <script>
-import { changeUserStatus, deleteById, listData, saveOrUpdate } from '@/api/user'
+import {changeUserStatus, deleteById, listData, saveOrUpdate} from '@/api/user'
+import {getToken} from '@/utils/auth'
 
 export default {
   name: 'User',
@@ -168,6 +182,10 @@ export default {
   },
   data() {
     return {
+      imageUrl: '',
+      upHeader: {
+        'X-Token': getToken()
+      },
       dialogTitle: '',
       dialogFormVisible: false,
       editForm: {
@@ -176,10 +194,10 @@ export default {
         gender: 0,
         status: '0'
       },
-      statusList: [{ value: 0, label: '正常' }, { value: 1, label: '禁用' }],
-      deletedList: [{ value: 0, label: '正常' }, { value: 1, label: '删除' }],
+      statusList: [{value: 0, label: '正常'}, {value: 1, label: '禁用'}],
+      deletedList: [{value: 0, label: '正常'}, {value: 1, label: '删除'}],
       rules: {
-        'username': [{ required: true, message: '用户名不能为空' }]
+        'username': [{required: true, message: '用户名不能为空'}]
       },
       defaultImgUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
       total: 0,
@@ -207,13 +225,30 @@ export default {
       }
       this.resetForm('editForm')
     },
+    handleAvatarSuccess(res, file) {
+      console.log(res)
+      console.log(file)
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return isJPG && isLt2M
+    },
     handleStatusChange(row) {
       const text = row.status === '0' ? '启用' : '禁用'
-      this.$modal.confirm('确认要"' + text + '""' + (row.nickname || row.username) + '"用户吗？').then(function() {
+      this.$modal.confirm('确认要"' + text + '""' + (row.nickname || row.username) + '"用户吗？').then(function () {
         return changeUserStatus(row.id, row.status)
       }).then(() => {
         this.$modal.msgSuccess(text + '成功')
-      }).catch(function() {
+      }).catch(function () {
         row.status = row.status === '0' ? '1' : '0'
       })
     },
@@ -224,7 +259,12 @@ export default {
         this.searchForm.current = data.current
         this.searchForm.limit = data.limit
         this.total = data.total
-        this.tableData = data.list
+        this.tableData = data.list.map(value => {
+          return {
+            ...value,
+            avatar: `/dev-api${value.avatar}`
+          }
+        })
         this.loading = false
       })
     },
@@ -303,11 +343,11 @@ export default {
     2. lang: 可以描述里面的内容是 css/less/sass/scss
 -->
 <style lang="css" scoped>
-  .line {
-    text-align: center;
-  }
+.line {
+  text-align: center;
+}
 
-  .el-pagination {
-    text-align: right;
-  }
+.el-pagination {
+  text-align: right;
+}
 </style>

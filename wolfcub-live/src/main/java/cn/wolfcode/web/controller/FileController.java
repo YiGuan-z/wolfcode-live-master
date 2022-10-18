@@ -1,11 +1,15 @@
 package cn.wolfcode.web.controller;
 
+import cn.wolfcode.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.util.UUID;
 
@@ -17,16 +21,21 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/file")
 public class FileController {
+    @Autowired
+    private IUserService userService;
+    @Autowired
+    private ServletContext ctx;
 
     @CrossOrigin
     @RequestMapping("/upload")
-    public String upload(@RequestParam MultipartFile file){
+    public String upload(@RequestParam MultipartFile file,Long id){
         String originalFilename = file.getOriginalFilename();
         //判空
+        assert originalFilename != null;
         String[] split = originalFilename.split("\\.");
 
 
-        String realPath="C:\\Users\\25135\\Desktop\\zu\\wolfcode-live-master\\wolfcub-live\\src\\main\\webapp\\upload";
+        String realPath = ctx.getRealPath("/upload");
         File filepath = new File(realPath);
 
         if (!filepath.exists()) {
@@ -34,9 +43,11 @@ public class FileController {
         }
 
         try {
-            String path = realPath +"\\"+ UUID.randomUUID()+"."+split[1];
-            System.out.println(path);
+            String random=UUID.randomUUID()+"."+split[1];
+            String path = realPath+"\\" +random;
             file.transferTo(new File(path));
+            String pathJsp="/upload/"+random;
+            userService.updateByFile(pathJsp,id);
         } catch (Exception e) {
             e.printStackTrace();
             return "error";

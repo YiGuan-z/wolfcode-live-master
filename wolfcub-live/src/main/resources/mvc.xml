@@ -24,6 +24,7 @@
             <mvc:exclude-mapping path="/login"/>
             <mvc:exclude-mapping path="/verifyCode"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/upload/**"/>
             <bean class="cn.wolfcode.web.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

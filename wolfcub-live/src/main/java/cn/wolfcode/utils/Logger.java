@@ -78,10 +78,6 @@ public class Logger {
 					.append('\t').append(name).append("执行成功，返回值为").append(JSON.toJSONString(target));
 			final var loggerModule = LoggerModule.of(Log.Level.info.name(), builder);
 			service.save(loggerModule);
-//			log.info("url:	{}", request.getRequestURL().toString());
-//			log.info("request: 	{}", JSON.toJSONString(args));
-//			log.info("{}方法启动,参数是{}", name, Arrays.toString(args));
-//			log.info("{}方法执行成功，返回值为{}", name, target);
 			log.info(builder.toString());
 			log.info("============================ end ===========================");
 			if (WHITE_LIST.contains(methodName)) {

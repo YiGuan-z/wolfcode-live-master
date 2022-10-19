@@ -261,7 +261,7 @@ export default {
           return {
             ...value,
             //  放个date放置抽风
-            avatar: `/dev-api${value.avatar}?p=${Date.now()}`
+            avatar: `${value.avatar}?p=${Date.now()}`
           }
         })
         this.loading = false

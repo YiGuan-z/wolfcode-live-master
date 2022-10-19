@@ -46,7 +46,7 @@
         <el-form-item label="用户头像选择">
           <el-upload
             class="avatar-uploader"
-            action="dev-api/file/uploade"
+            action="dev-api/file/upload"
             :headers="upHeader"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"

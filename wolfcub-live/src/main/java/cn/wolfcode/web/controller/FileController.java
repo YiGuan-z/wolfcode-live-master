@@ -68,40 +68,4 @@ public class FileController {
             return JsonResult.failed(e.getMessage());
         }
     }
-
-    @CrossOrigin
-    @RequestMapping("/uploade")
-    public JsonResult<?> uploade(@RequestParam MultipartFile file,Long id){
-        String originalFilename = file.getOriginalFilename();
-        //判空
-        assert originalFilename != null;
-        String[] split = originalFilename.split("\\.");
-
-
-        String realPath = ctx.getRealPath("/upload");
-        File filepath = new File(realPath);
-
-        if (!filepath.exists()) {
-            filepath.mkdir();
-        }
-
-        try {
-            String random=UUID.randomUUID()+"."+split[1];
-            final var syspath = System.getenv("PATH");
-            String path = null;
-            //判断操作系统
-            if (syspath.startsWith("/")) {
-                path = realPath + "/" + random;
-            } else {
-                path = realPath + "\\" + random;
-            }
-            file.transferTo(new File(path));
-            String pathJsp="/upload/"+random;
-            employeeService.updateByFile(pathJsp,id);
-            return JsonResult.success(pathJsp);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return JsonResult.failed(e.getMessage());
-        }
-    }
 }

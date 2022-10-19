@@ -1,6 +1,7 @@
 package cn.wolfcode.web.controller;
 
 import cn.wolfcode.domain.Logging;
+import cn.wolfcode.qo.LoggerQueryObject;
 import cn.wolfcode.qo.UserQuery;
 import cn.wolfcode.service.ILoggingService;
 import cn.wolfcode.vo.JsonResult;
@@ -20,7 +21,7 @@ public class LoggingController {
     }
 
     @RequestMapping("/list")
-    public JsonResult<Page<Logging>> query(UserQuery qo) {
+    public JsonResult<Page<Logging>> query(LoggerQueryObject qo) {
         return JsonResult.success(loggingService.query(qo));
     }
 

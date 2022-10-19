@@ -78,7 +78,7 @@ export const constantRoutes = [
         path: 'bulletMsgSensitive',
         name: 'BulletMsgSensitive',
         component: () => import('@/views/system/bulletMsgSendsitive'),
-        meta: { title: '敏感词管理', icon: 'el-icon-document' }
+        meta: { title: '敏感词管理', icon: 'language' }
       },
       {
         path: 'report',
@@ -90,13 +90,13 @@ export const constantRoutes = [
         path: 'video',
         name: 'Video',
         component: () => import('@/views/system/video'),
-        meta: { title: '视频管理', icon: 'tree' }
+        meta: { title: '视频管理', icon: 'el-icon-video-camera-solid' }
       },
       {
         path: 'logging',
         name: 'Logging',
         component: () => import('@/views/system/logging'),
-        meta: { title: '日志管理', icon: 'tree' }
+        meta: { title: '日志管理', icon: 'list' }
       }
     ]
   },

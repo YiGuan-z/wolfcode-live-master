@@ -9,6 +9,16 @@
               <el-form-item label="关键字">
                 <el-input v-model="searchForm.keyword" placeholder="请输入用户名/昵称" />
               </el-form-item>
+              <el-form-item label="日志级别">
+                <el-select v-model="searchForm.level" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.content"
+                    :label="item.content"
+                    :value="item.content"
+                  />
+                </el-select>
+              </el-form-item>
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
               </el-form-item>
@@ -19,15 +29,20 @@
             <el-table v-loading="loading" stripe :data="tableData">
               <el-table-column prop="id" label="编号" />
               <el-table-column prop="userId.username" label="用户名" :show-overflow-tooltip="true" />
-              <el-table-column prop="level" label="登录信息" :show-overflow-tooltip="true" />
-              <el-table-column prop="msg" label="访问时间" :show-overflow-tooltip="true" />
+              <el-table-column prop="level" label="日志等级" :show-overflow-tooltip="true" />
+              <el-table-column prop="msg" label="日志内容" :show-overflow-tooltip="true" />
+              <el-table-column label="选项" :show-overflow-tooltip="true">
+                <template v-slot="scope">
+                  <el-button @click="handleViewScope(scope)">查看</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </el-row>
           <!-- 分页 -->
           <el-row>
             <el-pagination
               :current-page="searchForm.current"
-              :page-sizes="[3, 5, 10, 20]"
+              :page-sizes="[5, 10, 20, 50]"
               :page-size="searchForm.limit"
               layout="total, sizes, prev, pager, next, jumper"
               :total="total"
@@ -39,13 +54,15 @@
       </el-row>
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="30%">
-      <el-form ref="editForm" :model="editForm" :rules="rules" status-icon label-width="80px" class="demo-ruleForm">
-        <el-input v-show="false" v-model="editForm.id" type="hidden" />
-        <el-form-item label="用户id" prop="userId">
-          <el-input v-model="editForm.userId.id" type="user_id" autocomplete="off" />
+      <el-form ref="editForm" :model="showForm" status-icon label-width="80px" class="demo-ruleForm">
+        <el-form-item label="日志编号" prop="id">
+          <el-input v-model="showForm.id" disabled autocomplete="off" />
         </el-form-item>
-        <el-form-item label="访问时间记录" prop="time">
-          <el-date-picker v-model="editForm.time" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" />
+        <el-form-item label="日志等级" prop="level">
+          <el-input :value="showForm.level" disabled />
+        </el-form-item>
+        <el-form-item label="日志信息" prop="msg">
+          <el-input type="textarea" :value="showForm.msg" />
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -72,9 +89,13 @@ export default {
     return {
       dialogTitle: '',
       dialogFormVisible: false,
-      editForm: {
-        userId: {},
+      showForm: {
+        id: undefined,
+        level: undefined,
+        msg: undefined,
+        time: undefined
       },
+      options: [{ content: 'info' }, { content: 'error' }, { content: 'warn' }, { content: 'debug' }, { content: 'tarce' }],
       rules: {
         'title': [{ required: true, message: '标题不能为空' }]
       },
@@ -83,8 +104,9 @@ export default {
       searchForm: {
         keyword: '',
         status: undefined,
+        level: null,
         current: 1,
-        limit: 3
+        limit: 10
       }
     }
   },
@@ -93,8 +115,18 @@ export default {
     this.fetchData(this.searchForm)
   },
   methods: {
+    handleViewScope({ row }) {
+      console.log(row)
+      this.showForm = {
+        id: row.id,
+        msg: row.msg.trim(),
+        level: row.level,
+        time: row.time
+      }
+      this.dialogFormVisible = true
+    },
     reset() {
-      this.editForm = {
+      this.showForm = {
         gender: 0,
         status: '0'
       }
@@ -143,7 +175,7 @@ export default {
       // 1. 修改标题为 编辑用户
       this.dialogTitle = '编辑用户'
       // 2. 将表单的数据清空
-      this.editForm = data
+      this.showForm = data
       // 3. 显示对话框
       this.dialogFormVisible = true
     }
@@ -157,11 +189,11 @@ export default {
     2. lang: 可以描述里面的内容是 css/less/sass/scss
 -->
 <style lang="css" scoped>
-  .line {
-    text-align: center;
-  }
+.line {
+  text-align: center;
+}
 
-  .el-pagination {
-    text-align: right;
-  }
+.el-pagination {
+  text-align: right;
+}
 </style>

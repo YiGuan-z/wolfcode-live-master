@@ -39,6 +39,9 @@
       <if test="keyword != null and keyword != ''">
         (level like concat('%',#{keyword},'%'))
       </if>
+      <if test="level!=null and level!=''">
+        and level=#{level}
+      </if>
     </where>
   </sql>
 

@@ -110,15 +110,8 @@
       </div>
     </el-dialog>
   </div>
-  <!-- 当 <template> 中有多个元素时, 会报错 -->
-  <!--  <div></div>-->
 </template>
 
-<!--
-  二部分: js 代码部分, 里面的语法默认是使用 es6模块化 的默认导出功能, 将 vue组件/页面 的配置信息进行导出
-    1. 里面的内容可以按照之前写 new Vue({params}) 中的 params 对象的方式编写
-    2. 在这里 data 属性必须是一个函数, 并且返回一个对象
- -->
 <script>
 import { listData, saveOrUpdate, deleteById } from '@/api/bulletMsgSensitive'
 
@@ -128,7 +121,10 @@ export default {
     return {
       dialogTitle: '',
       dialogFormVisible: false,
-      editForm: {},
+      editForm: {
+        sensitiveMsg: undefined,
+        showMsg: undefined
+      },
       filterText: '',
       defaultProps: {
         children: 'children',
@@ -140,7 +136,7 @@ export default {
         beginTime: undefined,
         endTime: undefined,
         current: 1,
-        limit: 3
+        limit: 10
       },
       rules: {}
     }
@@ -153,10 +149,6 @@ export default {
   created() {
     // 获取用户数据
     this.fetchData(this.searchForm)
-    // 获取部门数据
-    // listAll().then(res => {
-    //   this.departments = res.data
-    // });
   },
   methods: {
     filterNode(value, data) {
@@ -199,7 +191,7 @@ export default {
           saveOrUpdate(this.editForm)
             .then(res => {
               // 保存成功后重新刷新表格
-              this.fetchData()
+              this.fetchData(this.searchForm)
               // 提示用户保存成功
               this.$message.success('操作成功!')
               // 隐藏弹框

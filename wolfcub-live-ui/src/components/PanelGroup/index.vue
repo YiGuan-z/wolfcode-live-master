@@ -54,7 +54,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="40" style="border: 1px solid red">
+    <el-row :gutter="40">
       <div ref="chartEl" style="height:400px;width: 100%" />
     </el-row>
   </div>

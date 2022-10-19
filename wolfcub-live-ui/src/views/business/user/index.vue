@@ -260,7 +260,8 @@ export default {
         this.tableData = data.list.map(value => {
           return {
             ...value,
-            avatar: `/dev-api${value.avatar}`
+            //  放个date放置抽风
+            avatar: `/dev-api${value.avatar}?p=${Date.now()}`
           }
         })
         this.loading = false

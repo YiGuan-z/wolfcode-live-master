@@ -153,7 +153,22 @@ export default {
   },
   data() {
     return {
+      dialogTitle: '',
+      dialogFormVisible: false,
+      editForm: {
+        nickname: '',
+        dept: {},
+        gender: 0,
+        status: '0',
+        content: '',
+        reportBullet: '',
+        reportContent: '',
+        userId: null
+      },
       statusList: [{ value: 0, label: '正常' }, { value: 1, label: '禁用' }],
+      rules: {
+        'reportContent': [{ required: true, message: '举报内容不能为空' }]
+      },
       total: 0,
       tableData: [],
       loading: true,

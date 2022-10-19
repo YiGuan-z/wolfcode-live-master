@@ -128,7 +128,7 @@ export default {
         beginTime: undefined,
         endTime: undefined,
         current: 1,
-        limit: 3
+        limit: 10
       },
       statusList:
         [
@@ -149,7 +149,6 @@ export default {
   },
 
   methods: {
-
     handleStatusChange(row) {
       this.$modal.confirm(`确定要启动审核程序吗？`).then(function() {
         return selectInfoById({ id: 1 })
@@ -165,8 +164,8 @@ export default {
         }
         this.subForm = { id }
         this.dialogFormVisible = true
-      }).catch(function() {
-        row.status = row.status === '0' ? '1' : '0'
+      }).catch(function(err) {
+        console.log(err)
       })
     },
     filterNode(value, data) {

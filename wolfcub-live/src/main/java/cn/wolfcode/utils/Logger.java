@@ -50,13 +50,21 @@ public class Logger {
 			final var request = attributes.getRequest();
 			final var args = pjp.getArgs();
 			String name = null;
-			Log annotation = getLogAnnotation(pjp);
-			final var value = annotation.value();
-			final var level = annotation.level();
+			String value=null;
+			Log.Level level=null;
+			try {
+				Log annotation = getLogAnnotation(pjp);
+				if (Objects.nonNull(annotation)) {
+					value = annotation.value();
+					level = annotation.level();
+				}
+			}catch (Exception e){
+				handleErr(e);
+			}
 			log.info("============================ req ===========================");
 			log.info("url:	{}", request.getRequestURL().toString());
 			log.info("request: 	{}", JSON.toJSONString(args));
-			if (!value.equals("")) {
+			if (Objects.isNull(value)||!value.equals("")) {
 				name = value;
 			} else {
 				name = methodName;
@@ -81,15 +89,20 @@ public class Logger {
 				}
 			}
 		} catch (Throwable throwable) {
-			StringBuffer buffer = new StringBuffer();
-			final var trace = throwable.getStackTrace();
-			for (StackTraceElement element : trace) {
-				buffer.append(element.toString());
-			}
-			final var loggerModule = LoggerModule.of(Log.Level.error.name(), buffer.toString());
-			service.save(loggerModule);
+			handleErr(throwable);
 		}
 		return target;
+	}
+	
+	private void handleErr(Throwable throwable) {
+		StringBuffer buffer = new StringBuffer();
+		final var trace = throwable.getStackTrace();
+		for (StackTraceElement element : trace) {
+			buffer.append(element.toString());
+		}
+		final var loggerModule = LoggerModule.of(Log.Level.error.name(), buffer.toString());
+		log.info("{}", buffer);
+		service.save(loggerModule);
 	}
 	
 	/**
@@ -99,12 +112,19 @@ public class Logger {
 	 * @return
 	 * @throws NoSuchMethodException
 	 */
-	private Log getLogAnnotation(ProceedingJoinPoint pjp) throws NoSuchMethodException {
-		final var mothodName = pjp.getSignature().getName();
-		final var args = pjp.getArgs();
-		final var types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
-		final Class<?> clazz = pjp.getThis().getClass();
-		final var method = clazz.getDeclaredMethod(mothodName, types);
-		return AnnotationUtils.findAnnotation(method, Log.class);
+	private Log getLogAnnotation(ProceedingJoinPoint pjp) {
+		try {
+			final var mothodName = pjp.getSignature().getName();
+			final var args = pjp.getArgs();
+			final var types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
+			final Class<?> clazz = pjp.getThis().getClass();
+			final var method = clazz.getDeclaredMethod(mothodName, types);
+			return AnnotationUtils.findAnnotation(method, Log.class);
+		} catch (NoSuchMethodException e) {
+			handleErr(e);
+			return null;
+		}
+		
 	}
+	
 }

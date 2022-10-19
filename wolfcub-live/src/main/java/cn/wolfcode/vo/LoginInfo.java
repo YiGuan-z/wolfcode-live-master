@@ -12,7 +12,7 @@ import lombok.Setter;
 public class LoginInfo {
 
     private Long id;
-    private String name;
+    private String name="";
     private String username;
     private String avatar;
 }

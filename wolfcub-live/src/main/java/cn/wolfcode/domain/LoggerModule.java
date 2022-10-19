@@ -24,6 +24,9 @@ public class LoggerModule {
 	public static LoggerModule of(String level,String msg){
 		return of(level, msg,null);
 	}
+	public static LoggerModule of(String level,StringBuilder msg){
+		return of(level, msg.toString(),null);
+	}
 	
 	@Override
 	public String toString() {

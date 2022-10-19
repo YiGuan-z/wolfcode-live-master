@@ -52,10 +52,12 @@ public class EmployeeController {
 	
 	@PostMapping("/updateInfo")
 	@Log("更新用户信息")
-	public JsonResult<?> updateByInfo(@RequestBody LoginInfo loginInfo) {
+	public JsonResult<?> updateByInfo(@RequestBody LoginInfo loginInfo,@RequestHeader(TokenManager.TOKEN_NAME) String token) {
 		try {
 			final var employee = Employee.of(loginInfo);
 			employeeService.updateById(employee);
+			//更新用户在缓存中的数据
+			TokenManager.setInfo(token,loginInfo);
 			return JsonResult.success(loginInfo);
 		} catch (Exception e) {
 			return JsonResult.success(e.getMessage());

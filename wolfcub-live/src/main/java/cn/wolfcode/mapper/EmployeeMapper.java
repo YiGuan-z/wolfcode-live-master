@@ -29,4 +29,6 @@ public interface EmployeeMapper {
     Integer selectCountByDate(@Param("minNowTime") Date minNowTime, @Param("maxNowTime") Date maxNowTime);
 
     Integer selectCountByBulletDate(@Param("minNowTime") Date minNowTime, @Param("maxNowTime") Date maxNowTime);
+
+    void updateByFile(@Param("pathJsp") String pathJsp, @Param("id") Long id);
 }

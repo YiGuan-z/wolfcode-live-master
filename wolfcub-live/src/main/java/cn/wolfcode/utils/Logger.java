@@ -50,27 +50,39 @@ public class Logger {
 			final var request = attributes.getRequest();
 			final var args = pjp.getArgs();
 			String name = null;
-			String value=null;
-			Log.Level level=null;
+			String value = null;
+			Log.Level level = null;
 			try {
 				Log annotation = getLogAnnotation(pjp);
 				if (Objects.nonNull(annotation)) {
 					value = annotation.value();
 					level = annotation.level();
 				}
-			}catch (Exception e){
+			} catch (Exception e) {
 				handleErr(e);
 			}
+			StringBuilder builder = new StringBuilder();
+			
 			log.info("============================ req ===========================");
-			log.info("url:	{}", request.getRequestURL().toString());
-			log.info("request: 	{}", JSON.toJSONString(args));
-			if (Objects.isNull(value)||!value.equals("")) {
+			
+			if (Objects.isNull(value) || !value.equals("")) {
 				name = value;
 			} else {
 				name = methodName;
 			}
-			log.info("{}方法启动,参数是{}", name, Arrays.toString(args));
-			log.info("{}方法执行成功，返回值为{}", name, target);
+			builder
+					
+					.append('\n').append('\t').append("url:\t").append(request.getRequestURL()).append('\n')
+					.append('\t').append("request:\t").append(JSON.toJSONString(args)).append('\n')
+					.append('\t').append(name).append("方法执行参数是").append(Arrays.toString(args)).append('\n')
+					.append('\t').append(name).append("执行成功，返回值为").append(JSON.toJSONString(target));
+			final var loggerModule = LoggerModule.of(Log.Level.info.name(), builder);
+			service.save(loggerModule);
+//			log.info("url:	{}", request.getRequestURL().toString());
+//			log.info("request: 	{}", JSON.toJSONString(args));
+//			log.info("{}方法启动,参数是{}", name, Arrays.toString(args));
+//			log.info("{}方法执行成功，返回值为{}", name, target);
+			log.info(builder.toString());
 			log.info("============================ end ===========================");
 			if (WHITE_LIST.contains(methodName)) {
 				if (target instanceof JsonResult) {
@@ -81,10 +93,6 @@ public class Logger {
 						service.save(LoggerModule.of(level.name(),
 								String.format("%s用户已在%s登陆主机为%s", JSON.toJSONString(args[0]), request.getRequestURL(), host)
 								, info.getId()));
-					} else {
-						final Object data = ((JsonResult<?>) target).getData();
-						final var logger = LoggerModule.of(level.name(), JSON.toJSONString(data));
-						service.save(logger);
 					}
 				}
 			}

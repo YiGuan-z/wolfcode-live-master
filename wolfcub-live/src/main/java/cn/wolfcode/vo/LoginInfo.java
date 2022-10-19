@@ -3,6 +3,7 @@ package cn.wolfcode.vo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 
 /**
  * 专门用于封装登录后返回用户信息的对象
@@ -15,4 +16,9 @@ public class LoginInfo {
     private String name="";
     private String username;
     private String avatar;
+    public static LoginInfo of(Object obj){
+        final var info = new LoginInfo();
+        BeanUtils.copyProperties(info,obj);
+        return info;
+    }
 }

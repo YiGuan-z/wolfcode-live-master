@@ -44,6 +44,11 @@ module.exports = {
         target: 'http://localhost:8080', // 代理后的目标服务器地址(后台服务器地址)
         changeOrigin: true, // 允许跨域
         pathRewrite: { '^/dev-api': '' }
+      },
+      '/upload': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: { '^/upload': '/upload' }
       }
     }
     // before: require('./mock/mock-server.js')
@@ -97,7 +102,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()

@@ -11,4 +11,8 @@ public interface IEmployeeService extends IService<Employee, Long> {
     int resetPassword(String userId, String password, LoginInfo info);
 
     Today selectByCount();
+
+    void updateByFile(String pathJsp, Long id);
+    
+    
 }

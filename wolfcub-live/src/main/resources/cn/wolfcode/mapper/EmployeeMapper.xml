@@ -52,6 +52,9 @@
             <if test="hireDate != null">
                 hireDate=#{hireDate},
             </if>
+            <if test="avatar != null and avatar != ''">
+                avatar=#{avatar}
+            </if>
         </set>
         where id=#{id}
     </update>
@@ -140,6 +143,11 @@
     <update id="resetPassword">
         update sys_employee
         set password=#{password}
+        where id = #{id}
+    </update>
+    <update id="updateByFile">
+        update sys_employee
+        set avatar =#{pathJsp}
         where id = #{id}
     </update>
 </mapper>

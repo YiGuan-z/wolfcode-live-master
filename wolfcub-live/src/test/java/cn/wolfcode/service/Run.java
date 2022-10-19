@@ -3,8 +3,7 @@ package cn.wolfcode.service;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author 代星宇
@@ -39,5 +38,19 @@ public class Run {
         Date time = instance.getTime();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(format.format(time));
+    }
+
+    @Test
+    public void dsTest() throws Exception{
+        Map<String, String> map=new HashMap<>();
+        map.put("1", "这是一");
+        map.put("2", "这是二");
+        map.put("3", "这是三");
+        Set<String> keyset=map.keySet();
+        Iterator<String> it=keyset.iterator();
+        while(it.hasNext()){
+            String key=it.next();
+            System.out.println("key="+key+"\t"+"value="+map.get(key));
+        }
     }
 }

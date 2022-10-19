@@ -124,4 +124,9 @@ public class EmployeeServiceImpl implements IEmployeeService {
 //        mapper.selectCount
         return today;
     }
+
+    @Override
+    public void updateByFile(String pathJsp, Long id) {
+        mapper.updateByFile(pathJsp,id);
+    }
 }

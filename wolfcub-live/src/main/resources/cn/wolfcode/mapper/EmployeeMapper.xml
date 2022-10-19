@@ -142,4 +142,9 @@
         set password=#{password}
         where id = #{id}
     </update>
+    <update id="updateByFile">
+        update sys_employee
+        set avatar =#{pathJsp}
+        where id = #{id}
+    </update>
 </mapper>

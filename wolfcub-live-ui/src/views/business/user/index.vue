@@ -58,7 +58,6 @@
                   >
                     <el-avatar :src="scope.row.avatar"></el-avatar>
                   </el-upload>
-
                 </template>
               </el-table-column>
               <el-table-column prop="username" label="用户名"/>

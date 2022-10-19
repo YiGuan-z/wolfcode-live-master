@@ -20,10 +20,11 @@ public interface ReportMapper {
     int insert(Report record);
 
     Report selectByPrimaryKey(Long id);
+    Report selectInfoByPrimaryKey(Long id);
 
     List<Report> selectAll();
 
     int updateByPrimaryKey(Report record);
 
-    void reportStatus(@Param("id") Long id, Integer status);
+    void reportStatus(@Param("id") Long id,@Param("status") Integer status);
 }

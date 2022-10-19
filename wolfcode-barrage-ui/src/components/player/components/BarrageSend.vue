@@ -40,6 +40,9 @@ import "vue-slider-component/theme/default.css";
 import WSwitch from "./BarrageSwitch.vue";
 import svgIcon from "./BarrageIcon.vue";
 import WButton from "./BarrageButton.vue";
+
+import config from '@/config'
+
 export default {
   data(){
     return{
@@ -60,7 +63,6 @@ export default {
     //设置弹幕颜色
     SetColor(color) {
       this.barrageFrom.color = color;
-      this.$refs.send.style.color = color;
     },
     //设置弹幕不透明度
     SetOpaque(){
@@ -74,6 +76,10 @@ export default {
     },
     //发送弹幕
     Send(){
+      if (!config.userId) {
+        this.$emit('loginvisible', true)
+        return
+      }
       if(this.barrageFrom.text === ""){
         this.$parent.ShowMessage("弹幕内容不能为空");
         return;
@@ -139,6 +145,7 @@ export default {
   padding: 0 2px;
   border-radius: 6px;
   background: #ebebeb;
+  color: #999999;
   font-size: 12px;
 }
 

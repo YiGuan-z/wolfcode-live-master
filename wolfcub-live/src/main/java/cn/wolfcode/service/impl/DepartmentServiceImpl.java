@@ -4,6 +4,7 @@ import cn.wolfcode.domain.Department;
 import cn.wolfcode.mapper.DepartmentMapper;
 import cn.wolfcode.qo.QueryObject;
 import cn.wolfcode.service.IDepartmentService;
+import cn.wolfcode.utils.Log;
 import cn.wolfcode.vo.Page;
 import cn.wolfcode.vo.TreeData;
 import org.springframework.stereotype.Service;

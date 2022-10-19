@@ -2,12 +2,20 @@ package cn.wolfcode.web.controller.user;
 
 import cn.wolfcode.service.IUserService;
 import cn.wolfcode.utils.Log;
+import cn.wolfcode.utils.TokenManager;
 import cn.wolfcode.vo.JsonResult;
+import cn.wolfcode.vo.LoginInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,16 +37,26 @@ public class UserLoginController {
 		this.session = session;
 	}
 	
-	@RequestMapping("/login")
-	@Log(value = "用户登陆接口",level = Log.Level.info)
-	public JsonResult<?> login1(String username, String password, String verifyCode) {
+	@PostMapping("/login")
+	@Log(value = "用户登陆接口", level = Log.Level.info)
+	public JsonResult<?> login(@RequestBody HashMap<String, String> data) {
+		final var username = data.get("username");
+		final var password = data.get("password");
 		var errNum = (Integer) session.getAttribute("errNum");
 		try {
 			if (Objects.isNull(username)) throw new RuntimeException("未输入用户名");
-			final var code = (String) session.getAttribute("code");
-			final var token = userService.login(username, password, verifyCode, code);
+			final var token = userService.login(username, password);
 			log.info("{}已成功登陆", username);
-			return JsonResult.success(token);
+			//拼接数据包
+			final var info = TokenManager.getInfo(token);
+			final var loginInfo =
+					Map.of("userId", info.getId(),
+							"name", info.getName(),
+							"username", info.getUsername(),
+							"avatar", info.getAvatar()
+					);
+			final var map = Map.of("token", token, "loginInfo", loginInfo);
+			return JsonResult.success(map);
 		} catch (Exception e) {
 			log.error("{}登陆失败，原因是{}", username, e.getMessage());
 			if (Objects.isNull(errNum)) {
@@ -52,7 +70,7 @@ public class UserLoginController {
 			session.setAttribute("errNum", errNum + 1);
 			errNum = (Integer) session.getAttribute("errNum");
 			log.error("{}登陆失败次数{}", username, session.getAttribute("errNum"));
-			return JsonResult.failed(400, e.getMessage() + "失败" + errNum + "次");
+			return JsonResult.failed(400, "登陆失败" + errNum + "次");
 		}
 	}
 }

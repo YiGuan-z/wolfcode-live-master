@@ -52,6 +52,9 @@
             <if test="hireDate != null">
                 hireDate=#{hireDate},
             </if>
+            <if test="avatar != null and avatar != ''">
+                avatar=#{avatar}
+            </if>
         </set>
         where id=#{id}
     </update>

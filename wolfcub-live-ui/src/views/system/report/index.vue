@@ -12,7 +12,7 @@
           <el-row>
             <el-form :inline="true" size="mini" :model="searchForm" class="demo-form-inline">
               <el-form-item label="关键字">
-                <el-input v-model="searchForm.keyword" placeholder="请输 入被举报的用户名/姓名" />
+                <el-input v-model="searchForm.keyword" placeholder="请输入被举报的用户名/姓名" />
               </el-form-item>
               <el-form-item label="状态">
                 <el-select v-model="searchForm.status" clearable>
@@ -38,13 +38,20 @@
               <el-table-column prop="reportContent" label="举报内容" />
               <el-table-column prop="status" label="选项">
                 <template v-slot="scope">
-                  <!--TODO 审核管理                  -->
-                  <el-button
-                    title="审核"
-                    type="danger"
-                    plain
-                    @click="handleStatusChange(scope.row)"
-                  >审核</el-button>
+                  <div v-if="scope.row.status===0||scope.row.status===1">
+                    <el-button
+                      title="审核"
+                      type="danger"
+                      plain
+                      @click="handleStatusChange(scope.row)"
+                    >审核
+                    </el-button>
+                  </div>
+                  <div v-else>
+                    <el-tag>
+                      已审核
+                    </el-tag>
+                  </div>
                 </template>
               </el-table-column>
             </el-table>
@@ -65,35 +72,51 @@
       </el-row>
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="40%">
-      <el-form ref="editForm" :model="editForm" :rules="rules" status-icon label-width="80px" class="demo-ruleForm">
-        <el-input v-show="false" v-model="editForm.id" type="hidden" />
+      <el-form ref="editForm" :model="showForm" :rules="rules" status-icon label-width="80px" class="demo-ruleForm">
+        <el-form-item label="弹幕内容">
+          <el-input v-model="showForm.content" disabled />
+        </el-form-item>
+        <el-form-item label="举报内容">
+          <el-input v-model="showForm.reportContent" disabled />
+        </el-form-item>
+        <el-form-item label="举报时间">
+          <el-input v-model="showForm.reportDay" disabled />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm">提 交</el-button>
+        <el-button @click="submitForm(3)">不处理</el-button>
+        <el-button type="primary" @click="submitForm(2)">处 理</el-button>
       </div>
     </el-dialog>
   </div>
-  <!-- 当 <template> 中有多个元素时, 会报错 -->
-  <!--  <div></div>-->
+
 </template>
 
-<!--
-  二部分: js 代码部分, 里面的语法默认是使用 es6模块化 的默认导出功能, 将 vue组件/页面 的配置信息进行导出
-    1. 里面的内容可以按照之前写 new Vue({params}) 中的 params 对象的方式编写
-    2. 在这里 data 属性必须是一个函数, 并且返回一个对象
- -->
 <script>
-import { listData, saveOrUpdate, deleteById, reportStatus } from '@/api/report'
+import { listData, deleteById, reportStatus, selectInfoById } from '@/api/report'
 
 export default {
   name: 'Report',
+  filters: {
+    handleSwitch({ row }) {
+      const { status } = row
+      console.log(status)
+    }
+  },
   data() {
     return {
       status: '0',
       dialogTitle: '',
       dialogFormVisible: false,
-      editForm: {},
+      showForm: {
+        content: undefined,
+        reportContent: undefined,
+        reportDay: undefined
+      },
+      subForm: {
+        id: undefined,
+        stateus: undefined
+      },
       filterText: '',
       defaultProps: {
         children: 'children',
@@ -105,7 +128,7 @@ export default {
         beginTime: undefined,
         endTime: undefined,
         current: 1,
-        limit: 3
+        limit: 10
       },
       statusList:
         [
@@ -123,20 +146,26 @@ export default {
   created() {
     // 获取用户数据
     this.fetchData(this.searchForm)
-    // 获取部门数据
-    // listAll().then(res => {
-    //   this.departments = res.data
-    // });
   },
+
   methods: {
     handleStatusChange(row) {
-      const text = row.status === '0' ? '启用' : '禁用'
-      this.$modal.confirm(`确认要"${text}"这条弹幕吗？`).then(function() {
-        return reportStatus(row.id, row.status)
-      }).then(() => {
-        this.$modal.msgSuccess(`${text}成功`)
-      }).catch(function() {
-        row.status = row.status === '0' ? '1' : '0'
+      this.$modal.confirm(`确定要启动审核程序吗？`).then(function() {
+        return selectInfoById({ id: 1 })
+      }).then((res) => {
+        // this.$modal.msgSuccess(`${text}成功`)
+        // 使用id查询需要更新状态的数据
+        // TODO
+        const { bulletId, userId, id, reportContent, reportDay } = res.data
+        this.showForm = {
+          reportContent,
+          reportDay,
+          content: bulletId.content
+        }
+        this.subForm = { id }
+        this.dialogFormVisible = true
+      }).catch(function(err) {
+        console.log(err)
       })
     },
     filterNode(value, data) {
@@ -171,21 +200,16 @@ export default {
       this.searchForm.current = 1
       this.fetchData(this.searchForm)
     },
-    submitForm() {
-      // 增加表单校验拦截, 如果表单校验不通过, 不应该关闭弹窗
-      this.$refs.editForm.validate()
-        .then(valid => {
-          // 获取到当前的表单数据, 并发送请求到后台
-          saveOrUpdate(this.editForm)
-            .then(res => {
-              // 保存成功后重新刷新表格
-              this.fetchData()
-              // 提示用户保存成功
-              this.$message.success('操作成功!')
-              // 隐藏弹框
-              this.dialogFormVisible = false
-            })
-        })
+    async submitForm(state) {
+      this.subForm.stateus = state
+      const res = await reportStatus(this.subForm)
+      if (res['code'] !== 200) {
+        this.$message.error('服务器异常')
+      } else {
+        this.$message.success('审批成功')
+      }
+      this.dialogFormVisible = false
+      await this.fetchData(this.searchForm)
     },
     handleSave() {
       // 1. 修改标题为 新增用户

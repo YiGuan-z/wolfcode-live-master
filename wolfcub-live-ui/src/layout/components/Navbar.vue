@@ -43,7 +43,7 @@
         <el-form-item label="用户头像">
           <el-input v-model="userInfo.avatar" placeholder="可以放置外部图片链接" />
         </el-form-item>
-        <el-form-item label="用户头像">
+        <el-form-item label="用户头像选择">
           <el-upload
             class="avatar-uploader"
             action="dev-api/file/uploade"
@@ -58,7 +58,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="handleResetInfo">取 消</el-button>
         <el-button type="primary" @click="handleSaveInfo">确 定</el-button>
       </span>
     </el-dialog>
@@ -123,7 +123,10 @@ export default {
     handleAvatarSuccess(res, file) {
       // this.imageUrl = URL.createObjectURL(file.raw)
       // this.fetchData(this.userInfo)
-      console.log(file)
+      console.log(res)
+      const { data } = res
+      this.$store.dispatch('user/setAvatar', `${data}`)
+      this.userInfo.avatar = this.avatar
     },
     fetchData(params) {
       this.loading = true
@@ -137,6 +140,10 @@ export default {
         })
         this.loading = false
       })
+    },
+    async handleResetInfo() {
+      await this.$store.dispatch('user/getInfo')
+      this.dialogVisible = false
     },
     async handleSaveInfo() {
       const code = await this.$store.dispatch('user/updateUserInfo', this.userInfo)

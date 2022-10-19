@@ -23,15 +23,15 @@
   </insert>
   <update id="updateByPrimaryKey">
     update t_report
-    set userId = #{userId.id},
-      bulletId = #{bulletId.id},
+    set user_id = #{userId.id},
+    bullet_id = #{bulletId.id},
       content = #{reportContent},
       status = #{status}
     where id = #{id}
   </update>
   <update id="reportStatus">
     update t_report
-    set staus = #{status}
+    set status = #{status}
     where id = #{id}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
@@ -62,5 +62,12 @@
 		left join t_user u on r.user_id = u.id
     <include refid="where_if"/>
 	limit #{start}, #{limit}
+  </select>
+
+  <select id="selectInfoByPrimaryKey" resultMap="BaseResultMap">
+    select r.*, b.content b_content, u.nickname u_nickname
+    from t_report r left join t_bullet_msg b on r.bullet_Id = b.id
+                    left join t_user u on r.user_id = u.id
+    where r.id=#{id}
   </select>
 </mapper>

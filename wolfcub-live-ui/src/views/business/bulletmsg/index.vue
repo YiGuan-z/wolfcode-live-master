@@ -59,6 +59,7 @@
               </el-table-column>
               <el-table-column prop="fontSize" label="字体大小" />
               <el-table-column prop="likes" label="点赞数" />
+              <el-table-column prop="reporrtNum" label="举报数" />
               <el-table-column prop="status" label="状态">
                 <template v-slot="scope">
                   <el-switch
@@ -124,7 +125,7 @@
 </template>
 
 <script>
-import { changeStatus, listData, save } from '@/api/bulletMsg'
+import { changeStatus, listData, saveOrUpdate } from '@/api/bulletMsg'
 
 export default {
   name: 'BulletMsg',
@@ -200,7 +201,7 @@ export default {
       this.$refs.editForm.validate()
         .then(valid => {
           // 获取到当前的表单数据, 并发送请求到后台
-          save(this.editForm)
+          saveOrUpdate(this.editForm)
             .then(res => {
               // 保存成功后重新刷新表格
               this.fetchData()

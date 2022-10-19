@@ -93,7 +93,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public String login(String username, String password, String verifyCode, String code) {
+    public String login(String username, String password) {
         // 1. 基于用户名去数据库查询用户信息
         User user = mapper.selectByUsername(username);
         // 2. 如果信息不存在, 提示用户名或密码错误
@@ -106,13 +106,13 @@ public class UserServiceImpl implements IUserService {
             log.error("[员工服务] 登录失败, 密码输入错误, 用户名={}, 提交的密码={}", username, password);
             throw new RuntimeException("用户名或密码错误");
         }
-        if(code==null){
-            code="1111";
-        }
+//        if(code==null){
+//            code="1111";
+//        }
         //验证码判断
-        if (!code.equalsIgnoreCase(verifyCode)) {
-            throw new RuntimeException("验证码错误!!!");
-        }
+//        if (!code.equalsIgnoreCase(verifyCode)) {
+//            throw new RuntimeException("验证码错误!!!");
+//        }
         //状态为1时拒绝登录，状态为0登录。
         if ("1".equals(user.getStatus())) {
             throw new RuntimeException("你已被封号");

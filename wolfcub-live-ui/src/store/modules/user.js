@@ -26,7 +26,7 @@ const mutations = {
     state.name = name
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+    state.avatar = `${avatar}`
   },
   SET_USERNAME: (state, username) => {
     state.username = username
@@ -119,7 +119,7 @@ const actions = {
         .then(value => {
           const { data } = value
           if (!data) {
-            return reject('修改失败，请稍后在世')
+            return reject('修改失败，请稍后再试')
           }
           const { avatar, id, name, username } = data
           commit('SET_ID', id)
@@ -132,6 +132,9 @@ const actions = {
           reject(err)
         })
     })
+  },
+  setAvatar({ commit }, avatar) {
+    commit('SET_AVATAR', avatar)
   }
 }
 

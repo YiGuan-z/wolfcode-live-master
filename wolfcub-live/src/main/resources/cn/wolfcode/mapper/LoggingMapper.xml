@@ -3,41 +3,43 @@
 <mapper namespace="cn.wolfcode.mapper.LoggingMapper" >
   <resultMap id="BaseResultMap" type="cn.wolfcode.domain.Logging" >
     <id column="id" property="id" />
-    <result column="user_id" property="userId" />
     <result column="level" property="level" />
     <result column="msg" property="msg" />
     <result column="time" property="time" />
+    <association property="userId" column="user_id" select="cn.wolfcode.mapper.UserMapper.selectByPrimaryKey"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" >
     delete from logging
     where id = #{id}
   </delete>
   <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
-    insert into logging (userId, level, msg, time)
-    values (#{user.id}, #{level}, #{msg}, #{time})
+    insert into logging (user_id, level, msg, time)
+    values (#{userId.id}, #{level}, #{msg}, #{time})
   </insert>
   <update id="updateByPrimaryKey" >
     update logging
-    set userId = #{user.id},
+    set user_id = #{userId.id},
       level = #{level},
       msg = #{msg},
       time = #{time}
     where id = #{id}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
-    select id, userId, level, msg, time
+    select id, user_id, level, msg, time
     from logging
     where id = #{id}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, userId, level, msg, time
+    select id, user_id, level, msg, time
     from logging
   </select>
 
   <sql id="base_where">
-    <if test="keyword != null and keyword != ''">
-      (level like concat('%',#{keyword},'%'))
-    </if>
+    <where>
+      <if test="keyword != null and keyword != ''">
+        (level like concat('%',#{keyword},'%'))
+      </if>
+    </where>
   </sql>
 
   <select id="selectForCount" resultType="java.lang.Long">

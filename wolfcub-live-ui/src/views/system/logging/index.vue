@@ -12,19 +12,13 @@
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="handleQuery">查询</el-button>
               </el-form-item>
-              <el-form-item>
-                <el-button icon="el-icon-refresh" @click="resetQuery">重置</el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="success" plain icon="el-icon-plus" @click="handleSave()">新增</el-button>
-              </el-form-item>
             </el-form>
           </el-row>
           <!-- 表格 -->
           <el-row>
             <el-table v-loading="loading" stripe :data="tableData">
               <el-table-column prop="id" label="编号" />
-              <el-table-column prop="user.id" label="用户编号" :show-overflow-tooltip="true" />
+              <el-table-column prop="userId.username" label="用户名" :show-overflow-tooltip="true" />
               <el-table-column prop="level" label="登录信息" :show-overflow-tooltip="true" />
               <el-table-column prop="msg" label="访问时间" :show-overflow-tooltip="true" />
             </el-table>
@@ -47,8 +41,8 @@
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="30%">
       <el-form ref="editForm" :model="editForm" :rules="rules" status-icon label-width="80px" class="demo-ruleForm">
         <el-input v-show="false" v-model="editForm.id" type="hidden" />
-        <el-form-item label="用户id" prop="user.id">
-          <el-input v-model="editForm.user.id" type="user.id" autocomplete="off" />
+        <el-form-item label="用户id" prop="userId">
+          <el-input v-model="editForm.userId.id" type="user_id" autocomplete="off" />
         </el-form-item>
         <el-form-item label="访问时间记录" prop="time">
           <el-date-picker v-model="editForm.time" type="date" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" />
@@ -79,10 +73,7 @@ export default {
       dialogTitle: '',
       dialogFormVisible: false,
       editForm: {
-        user: {},
-        authorId: '',
-        gender: 0,
-        status: '0'
+        userId: {},
       },
       rules: {
         'title': [{ required: true, message: '标题不能为空' }]
@@ -92,7 +83,6 @@ export default {
       searchForm: {
         keyword: '',
         status: undefined,
-        deleted: 0,
         current: 1,
         limit: 3
       }

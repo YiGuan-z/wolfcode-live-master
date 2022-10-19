@@ -15,7 +15,7 @@ public class Logging {
     private Long id;
 
     /** 用户id用于判断用户状态*/
-    private Long userId;
+    private User userId;
 
     /** 日志等级*/
     private String level;

@@ -30,7 +30,7 @@ public class ReportController {
 	@RequestMapping("/update")
 	public JsonResult<?> update(@RequestBody Report report) {
 		if (report.getId() == null) {
-			return JsonResult.failed("ID不能为空");
+			reportService.save(report);
 		} else {
 			reportService.updateById(report);
 		}

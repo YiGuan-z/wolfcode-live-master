@@ -59,7 +59,7 @@
               </el-table-column>
               <el-table-column prop="fontSize" label="字体大小" />
               <el-table-column prop="likes" label="点赞数" />
-              <el-table-column prop="reporrtNum" label="举报数" />
+              <el-table-column prop="reportNum" label="举报数" />
               <el-table-column prop="status" label="状态">
                 <template v-slot="scope">
                   <el-switch
@@ -125,8 +125,8 @@
 </template>
 
 <script>
-import { changeStatus, listData, saveOrUpdate } from '@/api/bulletMsg'
-
+import { changeStatus, listData } from '@/api/bulletMsg'
+import { saveOrUpdate } from '@/api/report'
 export default {
   name: 'BulletMsg',
   filters: {

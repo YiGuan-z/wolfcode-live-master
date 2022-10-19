@@ -3,8 +3,6 @@
 <mapper namespace="cn.wolfcode.mapper.BulletMsgMapper">
     <resultMap id="BaseResultMap" type="cn.wolfcode.domain.BulletMsg">
         <id column="id" property="id"/>
-        <result column="author_id" property="author.id"/>
-        <result column="video_id" property="video.id"/>
         <result column="content" property="content"/>
         <result column="position" property="position"/>
         <result column="color" property="color"/>
@@ -13,6 +11,9 @@
         <result column="font_size" property="fontSize"/>
         <result column="status" property="status"/>
         <result column="release_time" property="releaseTime"/>
+        <result column="reportCount" property="reportNum"/>
+        <association property="author" column="author_id" resultMap="cn.wolfcode.mapper.UserMapper.BaseResultMap"/>
+        <association property="video" column="video_id" resultMap="cn.wolfcode.mapper.VideoMapper.BaseResultMap"/>
     </resultMap>
     <resultMap id="FullResultMap" extends="BaseResultMap" type="cn.wolfcode.domain.BulletMsg">
         <association property="author" columnPrefix="u_"
@@ -106,7 +107,8 @@
            u.username u_username,
            u.nickname u_nickname,
            v.id v_id,
-           v.title v_title
+           v.title v_title,
+            reportCount
     </sql>
     <sql id="full_join">
         t_bullet_msg bm
@@ -118,9 +120,16 @@
         from <include refid="full_join"/>
         <include refid="full_where"/>
     </select>
+    <!--查询被举报的次数-->
     <select id="selectForList" resultMap="FullResultMap">
         select <include refid="full_columns"/>
         from <include refid="full_join"/>
+        left join (select bm.id bm_id, COUNT(*) AS reportCount
+        from   t_report r
+        join   t_bullet_msg bm on r.bullet_id = bm.id
+        join   t_user u on u.id=r.user_id
+        GROUP BY bullet_id) temp
+        on temp.bm_id = bm.id
         <include refid="full_where"/>
         limit #{start}, #{limit}
     </select>
